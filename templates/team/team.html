@@ -1,0 +1,251 @@
+
+{%extends 'base/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+	
+	<!-- Page Title Section -->
+	<section class="page-title" style="background-image: url(https://html.themexriver.com/avarton/assets/images/background/2.jpg)">
+		<div class="auto-container">
+			<div class="content">
+				<div class="text">Welcome to our company</div>
+				<h1>Mentors</h1>
+			</div>
+			<div class="breadcrumb-outer">
+				<ul class="page-breadcrumb">
+					<li><a href="index.html">Home</a></li>
+					<li>Mentors</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- End Page Title Section -->
+	
+	<!-- Mentors Page Section -->
+	<section class="mentors-page-section">
+		<div class="auto-container">
+
+			<div class="row clearfix">
+
+				{% for i in staff %}
+				<!-- Mentor Block -->
+				<div class="mentor-block col-lg-3 col-md-6 col-sm-12">
+					<div class="inner-box">
+						<div class="image">
+							<a href="{% url 'staff:teamdetails' pk=i.id %}"><img class="transition-500ms" src="{{ i.image.url }}" alt="{{i.name}}" /></a>
+							<div class="designation">{{i.title}}</div>
+						</div>
+						<div class="lower-content">
+							<h5><a href="{% url 'staff:teamdetails' pk=i.id %}">{{i.name}}</a></h5>
+							<!-- Social Box -->
+							<ul class="social-box">
+								<li><a href="{{i.facebook}}" class="fa fa-facebook-f"></a></li>
+								<li><a href="{{i.twitter}}" class="fa fa-twitter"></a></li>
+								<li><a href="{{i.email}}" class="fa fa-envelope"></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				{%endfor%}
+				
+
+			</div>
+		</div>
+	</section>
+	<!-- End Mentors Page Section -->
+	
+	<!-- Process Section -->
+	<section class="process-section" style="background-image: url(assets/images/background/pattern-2.png)">
+		<div class="auto-container">
+			<!-- Sec Title -->
+			<div class="sec-title light">
+				<div class="title">Process</div>
+				<h2>Our Solution Process</h2>
+			</div>
+			<div class="row clearfix">
+				
+				<!-- Process Block -->
+				<div class="process-block col-xl-3 col-lg-6 col-md-6 col-sm-12">
+					<div class="inner-box transition-300ms">
+						<div class="icon transition-500ms flaticon-shopping-cart"></div>
+						<div class="step">step 01</div>
+						<h4><a href="service-detail.html">Plan For Work</a></h4>
+						<div class="text">Through plans, you break down a process into small and identify the things you accomplish..</div>
+					</div>
+				</div>
+				
+				<!-- Process Block -->
+				<div class="process-block col-xl-3 col-lg-6 col-md-6 col-sm-12">
+					<div class="inner-box transition-300ms">
+						<div class="icon transition-500ms flaticon-shopping-cart"></div>
+						<div class="step">step 02</div>
+						<h4><a href="service-detail.html">Implementation</a></h4>
+						<div class="text">Through plans, you break down a process into small and identify the things you accomplish..</div>
+					</div>
+				</div>
+				
+				<!-- Process Block -->
+				<div class="process-block col-xl-3 col-lg-6 col-md-6 col-sm-12">
+					<div class="inner-box transition-300ms">
+						<div class="icon transition-500ms flaticon-shopping-cart"></div>
+						<div class="step">step 03</div>
+						<h4><a href="service-detail.html">Consultancy</a></h4>
+						<div class="text">Through plans, you break down a process into small and identify the things you accomplish..</div>
+					</div>
+				</div>
+				
+				<!-- Process Block -->
+				<div class="process-block col-xl-3 col-lg-6 col-md-6 col-sm-12">
+					<div class="inner-box transition-300ms">
+						<div class="icon transition-500ms flaticon-shopping-cart"></div>
+						<div class="step">step 04</div>
+						<h4><a href="service-detail.html">Project Closure</a></h4>
+						<div class="text">Through plans, you break down a process into small and identify the things you accomplish..</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<!-- End Process Section -->
+	
+	<!-- Skill Section -->
+	<section class="skill-section">
+		<div class="auto-container">
+			<div class="row clearfix">
+			
+				<!-- Skill Column -->
+				<div class="skill-column col-lg-6 col-md-12 col-sm-12">
+					<div class="inner-column">
+						<!-- Sec Title -->
+						<div class="sec-title">
+							<div class="title color-three">Skillset</div>
+							<h2>Self Development Skillset</h2>
+							<div class="text">I am glad that you have made it here to send a distress signal, & inform the Senate that all on board were killed. Dantooine.</div>
+						</div>
+						
+						<!-- Skills -->
+						<div class="skills">
+
+							<!-- Skill Item -->
+							<div class="skill-item">
+								<div class="skill-header clearfix">
+									<div class="skill-title">Strategy Consulting</div>
+								</div>
+								<div class="skill-bar">
+									<div class="bar-inner">
+										<div class="bar progress-line" data-width="70">
+											<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="70">0</span>%</div></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Skill Item -->
+							<div class="skill-item">
+								<div class="skill-header clearfix">
+									<div class="skill-title">Operations Careers</div>
+								</div>
+								<div class="skill-bar">
+									<div class="bar-inner">
+										<div class="bar progress-line" data-width="64">
+											<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="64">0</span>%</div></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Skill Item -->
+							<div class="skill-item">
+								<div class="skill-header clearfix">
+									<div class="skill-title">Management Consulting</div>
+								</div>
+								<div class="skill-bar">
+									<div class="bar-inner">
+										<div class="bar progress-line" data-width="80">
+											<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="80">0</span>%</div></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						
+					</div>
+				</div>
+				
+				<!-- Image Column -->
+				<div class="image-column col-lg-6 col-md-12 col-sm-12">
+					<div class="inner-column wow fadeInRight" data-wow-delay="0ms" data-wow-duration="1500ms">
+						<div class="image titlt" data-tilt data-tilt-max="3">
+							<img src="assets/images/resource/skill.jpg" alt="" />
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<!-- End Skill Section -->
+	
+	<!-- Main Footer -->
+   
+	
+</div>
+<!-- End PageWrapper -->
+
+<!-- Search Popup -->
+<div class="search-popup">
+	<button class="close-search style-two"><span class="flaticon-cancel-1"></span></button>
+	<button class="close-search"><span class="flaticon-up-arrow"></span></button>
+	<form method="post" action="blog.html">
+		<div class="form-group">
+			<input type="search" name="search-field" value="" placeholder="Search Here" required="">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</div>
+	</form>
+</div>
+<!-- End Header Search -->
+
+<!-- Scroll To Top -->
+<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Revolution Slider -->
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/main-slider-script.js"></script>
+<!-- For Js Library -->
+
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/appear.js' %}"></script>
+<script src="{% static 'js/parallax.min.js' %}"></script>
+<script src="{% static 'js/tilt.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.paroller.min.js' %}"></script>
+<script src="{% static 'js/owl.js' %}"></script>
+<script src="{% static 'js/wow.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+<script src="{% static 'js/nav-tool.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
+
+{% endblock content %}

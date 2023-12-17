@@ -1,0 +1,716 @@
+{%extends 'base/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+
+<head>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <!-- Include jQuery UI with Datepicker -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Your other head elements go here -->
+</head>
+
+
+<style>
+    /* Add your existing CSS styles here */
+
+    /* Style for the date picker input */
+    #datepicker {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Optional: Adjust the width of the date picker input */
+    #datepicker {
+        width: 150px;
+    }
+
+    /* Optional: Adjust the margin or spacing for better alignment */
+    #datepicker {
+        margin-right: 10px;
+    }
+</style>
+
+
+
+
+
+
+<script type="text/javascript">
+    var user = '{{request.user}}';
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+</script>
+<head>
+    <title>Contact Form</title>
+    <style>
+        /* Style for the form container */
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Style for labels */
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Style for text inputs and email inputs */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Style for the submit button */
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Style for the submit button on hover */
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Placeholder fade effect */
+        input[type="text"]:focus::placeholder,
+        input[type="email"]:focus::placeholder,
+        input[type="tel"]:focus::placeholder {
+            transition: opacity 0.5s ease;
+            opacity: 0.5;
+        }
+
+		   
+    /* Style individual dropdowns */
+    select {
+        width: 200px; /* Adjust the width as needed */
+		height: 150px;
+		background-color: #f2f2f2;
+    }
+    </style>
+</head>
+
+	<!-- Cource Detail Banner Section -->
+    <section class="cource-detail-banner-section" style="background-image: url(assets/images/background/2.jpg)">
+		<div class="auto-container">
+			<div class="content-box">
+				<!-- <div class="title">Consultancy</div> -->
+				<h1>{{course.name}}</h1>
+				<ul class="course-info">
+					<li>Last Update November 24, 2020</li>
+					<li><span class="icon fa fa-user"></span>27 already enrolled</li>
+					<li class="rating">
+						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>
+						<span class="fa fa-star"></span>
+						<i>(12)</i>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- End Cource Detail Banner Section -->
+	
+	<!-- Course Detail Section -->
+	<section class="course-detail-section">
+		<div class="auto-container">
+			<div class="row clearfix">
+				
+				<!-- Content Column -->
+				<div class="content-column col-lg-8 col-md-12 col-sm-12">
+
+
+				<div class="submit-form" style="display:none">
+										
+						<label for="name">Name:</label>
+						<input type="text" id="name" name="name" placeholder="Your name..." required><br><br>
+				
+						<label for="phone">Phone:</label>
+						<input type="tel" id="phone" name="phone" placeholder="phone number" required><br><br>
+				
+						<label for="email">Email:</label>
+						<input type="email" id="email" name="email"  placeholder="email" required><br><br>
+
+
+										
+						<!-- First Multi-Select Tag -->
+						<label for="select1">Select Your prefare time </label>
+						<select id="select1" name="select1" multiple>
+							{%for i in periods%}
+								<option value="{{i.id}}">{{i}}</option>
+							{%endfor%}
+						</select>
+
+						<!-- Second Multi-Select Tag -->
+						<label for="select2">Selected  </label>
+						<select id="select2" name="select2" multiple>
+
+						</select>
+
+						<br><br>
+
+						<label for="datepicker">Choose a date:</label>
+						<input type="text" id="datepicker" name="datepicker" placeholder="Select a date" required>
+
+				
+						<input type="submit" value="Submit" id="submitButton">
+				</div>
+
+
+					<div class="inner-column">
+						
+						<!-- Course Info Tabs-->
+						<div class="course-info-tabs">
+							<!-- Course Tabs-->
+							<div class="course-tabs tabs-box">
+							
+								<!--Tab Btns-->
+								<ul class="tab-btns tab-buttons clearfix">
+									<li data-tab="#prod-overview" class="tab-btn active-btn">Overview</li>
+									<li data-tab="#prod-curriculum" class="tab-btn">Curriculum</li>
+									<li data-tab="#prod-reviews" class="tab-btn">Reviews</li>
+								</ul>
+								
+								<!--Tabs Container-->
+								<div class="tabs-content">
+									
+									<!-- Tab / Active Tab -->
+									<div class="tab active-tab" id="prod-overview">
+										<div class="content">
+											<p>{{course.coursedetails.overview}}</p>
+											
+											<!-- Requirement Box -->
+											<div class="requirement">
+												<h4>Requirements</h4>
+												<div class="row clearfix">
+													
+													<!-- Required Column -->
+													{%for i in course.coursedetails.requirements.all%}
+													<div class="required-column col-lg-4 col-md-6 col-sm-12">
+														<div class="required-inner">
+															<div class="required-text">{{i.name}}</div>
+														</div>
+													</div>
+													{%endfor%}													
+												</div>
+											</div>
+											<!-- End Requirement Box -->
+											
+											<!-- Target Box -->
+											<div class="target-box">
+												<h4>Target Audience</h4>
+												<ul class="target-list">
+													{%for i in course.coursedetails.audience.all%}
+													<li>{{i.name}}</li>
+													{%endfor%}													
+
+												</ul>
+											</div>
+											<!-- End Target Box -->
+											
+										</div>
+									</div>
+									
+									<!-- Tab -->
+									<div class="tab" id="prod-curriculum">
+										<div class="content">
+											
+											<!-- Curriculum Box -->
+											<div class="curriculum-box">
+												<div class="clearfix">
+													<div class="pull-left">
+														<h4>Curriculum</h4>
+													</div>
+													<div class="pull-right">
+														<ul class="lessons">
+															<li><span class="icon fa fa-book"></span>{{course.coursedetails.chapter_count}} Lessons</li>
+															<li><span class="icon fa fa-clock-o"></span>{{course.coursedetails.duration}}</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+											<!-- End Curriculum Box -->
+											
+											<!-- Accordian Box -->
+											<ul class="accordion-box">
+												
+												<!-- Block -->
+
+												{% for i in course.coursedetails.curriculum.module.all%}
+												<li class="accordion block">
+													<div class="acc-btn"><div class="icon-outer"><span class="icon icon-plus fa fa-plus"></span> <span class="icon icon-minus fa fa-minus"></span></div>{{i.name}}</div>
+													<div class="acc-content">
+														<div class="content">
+															<ul class="accordion-list">
+																{% for a in i.Chapter.all %}
+																<li>{{a.name}} <a class="lightbox-image list-icon fa fa-play" href="https://www.youtube.com/watch?v=kxPCFljwJws"></a></li>
+																{% endfor %}
+															</ul>
+														</div>
+													</div>
+												</li>
+												{%endfor%}
+
+											</ul>
+											<!-- End Accordian Box -->
+											
+											<!-- Skill Box -->
+											<div class="skill-box">
+												<div class="box-inner">
+													<div class="rating-box">
+														<div class="total-rating">4.6</div>
+														<div class="rating">
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</div>
+														<div class="total-reviews">30 reviews</div>
+													</div>
+													
+													<!-- Skills / Style Two -->
+													<div class="skills style-two">
+
+														<!-- Skill Item -->
+														<div class="skill-item">
+															<div class="skill-header clearfix">
+																<div class="skill-title">Excellent</div>
+															</div>
+															<div class="skill-bar">
+																<div class="bar-inner">
+																	<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="80">0</span>%</div></div>
+																	<div class="bar progress-line" data-width="80"></div>
+																</div>
+															</div>
+														</div>
+
+														<!-- Skill Item -->
+														<div class="skill-item">
+															<div class="skill-header clearfix">
+																<div class="skill-title">Very Good</div>
+															</div>
+															<div class="skill-bar">
+																<div class="bar-inner">
+																	<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="70">0</span>%</div></div>
+																	<div class="bar progress-line" data-width="70"></div>
+																</div>
+															</div>
+														</div>
+
+														<!-- Skill Item -->
+														<div class="skill-item">
+															<div class="skill-header clearfix">
+																<div class="skill-title">Very Good</div>
+															</div>
+															<div class="skill-bar">
+																<div class="bar-inner">
+																	<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="60">0</span>%</div></div>
+																	<div class="bar progress-line" data-width="60"></div>
+																</div>
+															</div>
+														</div>
+														
+														<!-- Skill Item -->
+														<div class="skill-item">
+															<div class="skill-header clearfix">
+																<div class="skill-title">Poor</div>
+															</div>
+															<div class="skill-bar">
+																<div class="bar-inner">
+																	<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="50">0</span>%</div></div>
+																	<div class="bar progress-line" data-width="50"></div>
+																</div>
+															</div>
+														</div>
+														
+														<!-- Skill Item -->
+														<div class="skill-item">
+															<div class="skill-header clearfix">
+																<div class="skill-title">Terrible</div>
+															</div>
+															<div class="skill-bar">
+																<div class="bar-inner">
+																	<div class="skill-percentage"><div class="count-box"><span class="count-text" data-speed="2000" data-stop="40">0</span>%</div></div>
+																	<div class="bar progress-line" data-width="40"></div>
+																</div>
+															</div>
+														</div>
+
+													</div>
+											
+												</div>
+											</div>
+											<!-- End Skill Box -->
+											
+										</div>
+									</div>
+									
+									<!-- Tab -->
+									<div class="tab" id="prod-reviews">
+										<div class="content">
+											
+											<!-- Comments Area -->
+											<div class="comments-area">
+												<div class="group-title">
+													<h4>User Feedbacks</h4>
+												</div>
+												
+												<div class="comment-box">
+													<div class="comment">
+														<div class="author-thumb"><img src="{% static 'images/resource/author-3.jpg" alt=""></div>
+														<div class="comment-info clearfix">
+															<strong>Kevin Martin</strong>
+															<div class="comment-time">26 July, 2022</div>
+															<div class="rating">
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+															</div>
+														</div>
+														<div class="text">Lorem ipsum is simply free text used by copytyping refreshing. Neque porro est qui dolorem ipsum a quia quaed inventore veritatis et quasi architecto beatae vitae dicta sunt explicabocopytyping mean refreshing que porro espanio.</div>
+														<a class="theme-btn reply-btn" href="#"><span class="fa fa-reply"></span> Reply</a>
+													</div>
+												</div>
+												
+												<div class="comment-box">
+													<div class="comment">
+														<div class="author-thumb"><img src="assets/images/resource/author-9.jpg" alt=""></div>
+														<div class="comment-info clearfix">
+															<strong>Kevin Martin</strong>
+															<div class="comment-time">26 July, 2022</div>
+															<div class="rating">
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+																<span class="fa fa-star"></span>
+															</div>
+														</div>
+														<div class="text">Lorem ipsum is simply free text used by copytyping refreshing. Neque porro est qui dolorem ipsum a quia quaed inventore veritatis et quasi architecto beatae vitae dicta sunt explicabocopytyping mean refreshing que porro espanio.</div>
+														<a class="theme-btn reply-btn" href="#"><span class="fa fa-reply"></span> Reply</a>
+													</div>
+												</div>
+												
+											</div>
+											
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				
+				<!-- Info Column -->
+				<div class="info-column col-lg-4 col-md-12 col-sm-12">
+					<div class="inner-column">
+					
+						<!-- Video Intro Widget -->
+						<div class="video-intro-widget">
+							<!-- Video Box -->
+							<div class="intro-video" style="background-image: url(assets/images/resource/video-image-1.jpg)">
+								<a href="https://www.youtube.com/watch?v=kxPCFljwJws" class="lightbox-image intro-video-box"><span class="fa fa-play"><i class="ripple"></i></span></a>
+							</div>
+							<div class="lower-content">
+								<div class="price">{{course.coursedetails.price}} EGP<span>{{course.coursedetails.old_price}}</span></div>
+								<ul class="intro-list">
+									<li><span class="icon fa fa-link"></span><strong>Level</strong><i>All Levels</i></li>
+									<li><span class="icon fa fa-clock-o"></span><strong>Duration</strong><i>{{course.coursedetails.duration}}</i></li>
+									<li><span class="icon fa fa-video-camera"></span><strong>Lectures</strong><i>{{course.coursedetails.module_count}} Lectures</i></li>
+									<li><span class="icon fa fa-book"></span><strong>Subject</strong><i>Teacher Training</i></li>
+									<li><span class="icon fa fa-money"></span><strong>Language</strong><i>English</i></li>
+								</ul>
+								
+								<!-- Buttons Box -->
+								<div class="buttons-box">
+									<a href="#" class="enroll-btn theme-btn" id="enroll-button">Enroll Now <span class="icon fa fa-long-arrow-right"></span></a>
+									<a href="#" class="wishlist-btn theme-btn">Add To Wishlist <span class="icon fa fa-star"></span></a>
+								</div>
+								<!-- End Buttons Box -->
+								
+								<!-- Social Box -->
+								<ul class="social-box">
+									<li><a href="https://www.facebook.com/" class="fa fa-facebook-f"></a></li>
+									<li><a href="https://www.twitter.com/" class="fa fa-twitter"></a></li>
+									<li><a href="https://www.behance.com/" class="fa fa-behance"></a></li>
+									<li><a href="https://www.linkedin.com/" class="fa fa-linkedin"></a></li>
+									<li><a href="https://youtube.com/" class="fa fa-youtube-play"></a></li>
+								</ul>
+								
+							</div>
+						</div>
+						<!-- End Video Intro Widget -->
+						
+						<!-- Category Widget -->
+						<div class="category-widget">
+							<div class="widget-content">
+								<h5>Course Categories</h5>
+								<ul class="cat-list">
+									<li><a href="#">Engilsh</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End Category Widget -->
+						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<!-- End Course Detail Section -->
+	
+	<!-- Main Footer -->
+  
+</div>
+<!-- End PageWrapper -->
+
+<!-- Search Popup -->
+<div class="search-popup">
+	<button class="close-search style-two"><span class="flaticon-cancel-1"></span></button>
+	<button class="close-search"><span class="flaticon-up-arrow"></span></button>
+	<form method="post" action="blog.html">
+		<div class="form-group">
+			<input type="search" name="search-field" value="" placeholder="Search Here" required="">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</div>
+	</form>
+</div>
+<!-- End Header Search -->
+
+<!-- Scroll To Top -->
+<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Revolution Slider -->
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js"></script>
+<script src="{% static 'plugins/revolution/js/main-slider-script.js' %}"></script>
+<!-- For Js Library -->
+
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/appear.js' %}"></script>
+<script src="{% static 'js/parallax.min.js' %}"></script>
+<script src="{% static 'js/tilt.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.paroller.min.js' %}"></script>
+<script src="{% static 'js/owl.js' %}"></script>
+<script src="{% static 'js/wow.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+<script src="{% static 'js/nav-tool.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+
+<script>
+
+// Get a reference to the "Enroll Now" button, the content div, and the form submit elements
+const enrollButton = document.getElementById("enroll-button");
+const contentDiv = document.querySelector(".inner-column");
+const formsubmit = document.getElementsByClassName("submit-form");
+
+console.log(formsubmit);
+
+// Add a click event listener to the button
+enrollButton.addEventListener("click", function (e) {
+    e.preventDefault(); // Prevent the default link behavior
+
+    // Toggle the visibility of the content div
+    if (contentDiv.style.display === "none") {
+        contentDiv.style.display = "block"; // Show the content
+        enrollButton.textContent = "Enroll Now"; // Change the button text
+
+        // Loop through the form submit elements and set their display to "block"
+        for (let i = 0; i < formsubmit.length; i++) {
+            formsubmit[i].style.display = "none";
+        }
+    } else {
+        contentDiv.style.display = "none"; // Hide the content
+        enrollButton.textContent = "Go Back to Course Content"; // Change the button text
+
+        // Loop through the form submit elements and set their display to "none"
+        for (let i = 0; i < formsubmit.length; i++) {
+            formsubmit[i].style.display = "block";
+        }
+    }
+});
+
+
+</script>
+
+
+
+
+<script>
+    const select1 = document.getElementById("select1");
+    const select2 = document.getElementById("select2");
+
+    // Function to transfer selected options from select1 to select2
+    function transferOptionsFromSelect1ToSelect2() {
+        const selectedOption = select1.options[select1.selectedIndex];
+        if (selectedOption) {
+            // Clone the selected option and append it to select2
+            const clonedOption = selectedOption.cloneNode(true);
+            select2.appendChild(clonedOption);
+
+            // Remove the selected option from select1
+            select1.removeChild(selectedOption);
+        }
+    }
+
+    // Function to transfer selected options from select2 to select1
+    function transferOptionsFromSelect2ToSelect1() {
+        const selectedOption = select2.options[select2.selectedIndex];
+        if (selectedOption) {
+            // Clone the selected option and append it to select1
+            const clonedOption = selectedOption.cloneNode(true);
+            select1.appendChild(clonedOption);
+
+            // Remove the selected option from select2
+            select2.removeChild(selectedOption);
+        }
+    }
+
+    // Add event listeners to both select elements
+    select1.addEventListener("dblclick", transferOptionsFromSelect1ToSelect2);
+    select2.addEventListener("dblclick", transferOptionsFromSelect2ToSelect1);
+</script>
+
+<script>
+	// Get a reference to the submit button
+	const submitButton = document.getElementById('submitButton');
+
+	// Add a click event listener to the submit button
+	submitButton.addEventListener('click', function(event) {
+		event.preventDefault(); // Prevent the form from submitting
+
+		// Get the values of the input fields
+		const name = document.getElementById('name').value;
+		const phone = document.getElementById('phone').value;
+		const email = document.getElementById('email').value;
+		const startDate = document.getElementById('datepicker').value;
+
+
+
+		// Get the selected options from the second select element
+		const select2 = Array.from(document.getElementById('select2')).map(option => option.value);
+
+		
+		var userFormData = {
+			"Name":null,
+			"Phone":null,
+			"Email":null,
+			"periods":null,
+			"course_id":{{course.pk}},
+			'startDate':null
+		}
+
+		userFormData.Name = name
+		userFormData.Phone = phone
+		userFormData.Email = email
+		userFormData.periods = select2
+		userFormData.startDate = startDate
+		
+
+
+		var url = '/courses/' + '{{course.pk}}' + '/submit_form'
+
+		fetch(url,{
+			method:"POST",
+			headers:{
+				"Content-Type":'application/json',
+				'X-CSRFToken':csrftoken,
+			},
+			body:JSON.stringify({'form':userFormData})
+		})
+		.then((response) => response.json())
+		.then((data) => {
+			const dataString = JSON.stringify(data);
+			console.log(dataString["message"]) 
+			alert(dataString) 
+
+		})
+		
+	});
+</script>
+
+
+
+
+
+<script>
+    $(function() {
+        // Initialize the datepicker
+        $("#datepicker").datepicker({
+            dateFormat: "yy-mm-dd", // Choose your desired date format
+            changeMonth: true,
+            changeYear: true,
+        });
+    });
+</script>
+
+
+
+
+{% endblock content %}
+
+</body>
+</html>

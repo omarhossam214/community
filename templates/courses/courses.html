@@ -1,0 +1,147 @@
+
+{%extends 'base/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- Page Title Section -->
+	<section class="page-title" style="background-image: url"({% static 'images/background/2.jpg' %})">
+		<div class="auto-container">
+			<div class="content">
+				<div class="text">Welcome to our company</div>
+				<h1>Popular Courses</h1>
+			</div>
+			<div class="breadcrumb-outer">
+				<ul class="page-breadcrumb">
+					<li><a href="index.html">Home</a></li>
+					<li>Popular Courses</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- End Page Title Section -->
+	
+	<!-- Courses Page Section -->
+	<section class="courses-page-section">
+		<div class="auto-container">
+			
+			<!-- Order Box -->
+			<div class="order-box">
+				<div class="clearfix">
+					<div class="pull-left">
+						<div class="text">Showing 1-6 of 14 results</div>
+					</div>
+					<div class="pull-right clearfix">
+					
+						<!-- Search -->
+                        <div class="order-search-box">
+                        	<form method="post" action="contact.html">
+                                <div class="form-group">
+                                    <input type="search" name="search-field" value="" placeholder="Search here..." required>
+                                    <button type="submit"><span class="icon fa fa-search"></span></button>
+                                </div>
+                            </form>
+						</div>
+						
+						<!-- Search Dropdown -->
+						<div class="search-dropdown form-group">
+							<select name="country" class="custom-select-box">
+								<option>Select Order</option>
+								<option>Order 01</option>
+								<option>Order 02</option>
+								<option>Order 03</option>
+								<option>Order 04</option>
+							</select>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!-- End Order Box -->
+			
+			<div class="row clearfix">
+			
+				<!-- Course Block -->
+				{% for i in courses %}
+				<div class="course-block col-xl-3 col-lg-4 col-md-6 col-sm-12">
+					<div class="inner-box">
+						<div class="image">
+							<a href="{% url 'course:coursedetails' pk=i.id %}"><img class="transition-500ms" src="{{ i.img.url }}" alt="" /></a>
+						</div>
+						<div class="lower-content">
+							<h5><a href="{% url 'course:coursedetails' pk=i.id %}">{{i}}</a></h5>
+							<ul class="post-info">
+								<li><span class="icon flaticon-book-1"></span>{{ i.coursedetails.module_count }} Chapter</li>
+								<li><span class="icon flaticon-trophy"></span>{{ i.coursedetails.chapter_count }} Lessons</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			
+				
+			</div>
+		</div>
+	</section>
+	<!-- End Courses Page Section -->
+	
+	<!-- Main Footer -->
+ 
+	
+</div>
+<!-- End PageWrapper -->
+
+<!-- Search Popup -->
+<div class="search-popup">
+	<button class="close-search style-two"><span class="flaticon-cancel-1"></span></button>
+	<button class="close-search"><span class="flaticon-up-arrow"></span></button>
+	<form method="post" action="blog.html">
+		<div class="form-group">
+			<input type="search" name="search-field" value="" placeholder="Search Here" required="">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</div>
+	</form>
+</div>
+<!-- End Header Search -->
+
+<!-- Scroll To Top -->
+<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Revolution Slider -->
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/main-slider-script.js"></script>
+<!-- For Js Library -->
+
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/appear.js' %}"></script>
+<script src="{% static 'js/parallax.min.js' %}"></script>
+<script src="{% static 'js/tilt.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.paroller.min.js' %}"></script>
+<script src="{% static 'js/owl.js' %}"></script>
+<script src="{% static 'js/wow.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+<script src="{% static 'js/nav-tool.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
+
+{% endblock content %}

@@ -1,0 +1,174 @@
+{%extends 'base/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+	
+	<!-- Page Title Section -->
+	<section class="page-title" style="background-image: url(https://html.themexriver.com/avarton/assets/images/background/2.jpg)">
+		<div class="auto-container">
+			<div class="content">
+				<div class="text">Welcome to our company</div>
+				<h1>Mentors</h1>
+			</div>
+			<div class="breadcrumb-outer">
+				<ul class="page-breadcrumb">
+					<li><a href="index.html">Home</a></li>
+					<li>Mentors Detail</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- End Page Title Section -->
+	
+	<!-- Sidebar Page Container -->
+    <div class="sidebar-page-container left-sidebar">
+    	<div class="auto-container">
+        	<div class="row clearfix">
+				
+				<!-- Sidebar Side -->
+                <div class="sidebar-side col-lg-3 col-md-12 col-sm-12">
+                	<aside class="sidebar sticky-top">
+					
+						<!-- Mentor Widget -->
+						<div class="mentor-widget">
+							<div class="inner-box">
+								<div class="image">
+									<img src="{{staff.image.url}}" alt="" />
+								</div>
+								<div class="lower-content">
+									<h5>{{staff.name}}</h5>
+									<div class="text">{{staff.overview}}</div>
+									<ul class="contact-list">
+										<li><span class="icon fa fa-envelope"></span><a href="{{staff.email}}">{{staff.email}}</a></li>
+										<li><span class="icon fa fa-phone"></span><a href="tel:{{staff.mobile}}">{{staff.mobile}}</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- Mentor Widget -->
+						
+						<!-- Award Widget -->
+						<div class="award-widget">
+							<div class="inner-box">
+								<div class="single-item-carousel owl-carousel owl-theme">
+									{% for i in imgs%}
+
+									<div class="slide">
+										<div class="image">
+											<img src='{{i.photo.url}}' alt="" />
+										</div>
+									</div>
+
+									{%endfor%}
+			
+								</div>
+							</div>
+						</div>
+						<!-- Award Widget -->
+						
+					</aside>
+				</div>
+				
+				<!-- Content Side -->
+                <div class="content-side col-lg-9 col-md-12 col-sm-12">
+					<!-- Course Tag -->
+					<div class="course-tag">
+						<div class="clearfix">
+							<div class="pull-left">
+								<h5>Popular Courses</h5>
+							</div>
+							<div class="pull-right">
+								<div class="icon flaticon-book-1"></div>
+							</div>
+						</div>
+					</div>
+					<!-- End Course Tag -->
+                	<div class="row clearfix">
+						
+						<!-- Course Block -->
+						{%for i in staff.courses.all%}
+						<div class="course-block col-lg-4 col-md-6 col-sm-12">
+							<div class="inner-box">
+								<div class="image">
+									<a href="{% url 'course:coursedetails' pk=i.id %}"><img class="transition-500ms" src="{{i.img.url}}" alt="{{i.name}}" /></a>
+								</div>
+								<div class="lower-content">
+									<h5><a href="{% url 'course:coursedetails' pk=i.id %}">{{i.name}}</a></h5>
+									<ul class="post-info">
+										<li><span class="icon flaticon-book-1"></span>{{ i.coursedetails.module_count }} Chapter</li>
+										<li><span class="icon flaticon-trophy"></span>{{ i.coursedetails.chapter_count }} Lessons</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						{%endfor%}
+	
+						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- End Mentors Page Section -->
+	
+	
+</div>
+<!-- End PageWrapper -->
+
+<!-- Search Popup -->
+<div class="search-popup">
+	<button class="close-search style-two"><span class="flaticon-cancel-1"></span></button>
+	<button class="close-search"><span class="flaticon-up-arrow"></span></button>
+	<form method="post" action="blog.html">
+		<div class="form-group">
+			<input type="search" name="search-field" value="" placeholder="Search Here" required="">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</div>
+	</form>
+</div>
+<!-- End Header Search -->
+
+<!-- Scroll To Top -->
+<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Revolution Slider -->
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/main-slider-script.js' %}"></script>
+<!-- For Js Library -->
+
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/appear.js' %}"></script>
+<script src="{% static 'js/parallax.min.js' %}"></script>
+<script src="{% static 'js/tilt.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.paroller.min.js' %}"></script>
+<script src="{% static 'js/owl.js' %}"></script>
+<script src="{% static 'js/wow.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+<script src="{% static 'js/nav-tool.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
+
+
+{% endblock content %}
