@@ -49,8 +49,8 @@ class instructor(models.Model):
     
     def save(self, *args, **kwargs):
 
-        self.count = ActiveCourse.objects.filter(teacher=self.pk).count()
-
+        self.count = ActiveCourse.objects.filter(teacher=self.pk,active=True).count()
+        print(232323232)
         super().save(*args, **kwargs)
 
 
@@ -84,6 +84,7 @@ class ActiveCourse(models.Model):
     active = models.BooleanField(default=True)
     capacity = models.IntegerField(null=True, default=5)
     enrolled  =  models.IntegerField(null=True,blank=True)
+    full =  models.BooleanField(default=False)
     payment = models.ImageField(upload_to='payment_images/', blank=True, null=True)
 
 
@@ -92,14 +93,21 @@ class ActiveCourse(models.Model):
         self.enrolled = self.get_pupl_total
         self.course_class_id = f"ENG00{self.pk}"
 
+        if self.capacity >= self.enrolled:
+            self.full = True
+        else:
+            self.full = False
 
-        teacher_count=ActiveCourse.objects.filter(teacher=self.teacher).count()
-        print(teacher_count)
+        # teacher_count=ActiveCourse.objects.filter(teacher=self.teacher,active=True).count()
+        # self.teacher.count = teacher_count
+        # self.teacher.save()
+        # Call the save method of the associated instructor instance
 
-
+        
         super().save(*args, **kwargs)
 
-
+        if self.teacher:
+            self.teacher.save()
 
 
     @property
@@ -125,10 +133,6 @@ class pupl(models.Model):
     active = models.ForeignKey(ActiveCourse, on_delete=models.SET_NULL,null=True)
 
     payment = models.ImageField(upload_to='payment_images/', blank=True, null=True)
-
-
-
-
 
 
     @job

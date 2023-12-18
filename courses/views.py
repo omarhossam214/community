@@ -31,13 +31,9 @@ def index(request):
 def coursedetails(request, pk):
 
     course = get_object_or_404(Course, pk=pk)
-    # Change 'periods' to 'Period' or the name of the model you are using
-    Periods = periods.objects.all()  # Make sure to use the correct model name
 
-    instructor_id_with_less_count = instructor.get_instructor_with_less_count()
+    Periods = periods.objects.all()  
 
-    print(instructor_id_with_less_count)
-    print(23232323232323)
     return render(request, 'course-detail/course-detail.html', {'course': course, 'periods': Periods})
 
 
@@ -68,11 +64,10 @@ def submit_form(request, pk):
     except:
          print("can't create activecourse ")
 
-    if not created_1 and activecourse.enrolled < activecourse.capacity:
-            ActiveCourse.objects.filter(pk=activecourse.pk)
 
-    elif not created_1 and activecourse.enrolled >= activecourse.capacity:
-          activecourse = ActiveCourse.objects.create(course=course,start_date=startDate)
+    if not created_1 and activecourse.enrolled >= activecourse.capacity:
+          activecourse = ActiveCourse.objects.create(course=course,teacher=instructor_id_with_less_count)
+ 
 
 
         
