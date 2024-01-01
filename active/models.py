@@ -28,10 +28,15 @@ from django.db.models import Count
 class instructor(models.Model):
     
     name = models.CharField(max_length=100,unique=True)
+
     mobile = models.CharField(max_length=100,  blank=True, null=True)
+
     email = models.CharField(max_length=100,  blank=True, null=True)
+
     courses = models.ManyToManyField(Course, blank=True, null=True)
+
     periods = models.ManyToManyField(periods, blank=True, null=True)
+
     count = models.IntegerField(null=True,blank=True,default = 0)
 
  
@@ -50,7 +55,7 @@ class instructor(models.Model):
     def save(self, *args, **kwargs):
 
         self.count = ActiveCourse.objects.filter(teacher=self.pk,active=True).count()
-        print(232323232)
+
         super().save(*args, **kwargs)
 
 
@@ -65,51 +70,77 @@ class instructor(models.Model):
 
 class ActiveCourse(models.Model):
 
-    course_class_id = models.CharField(max_length=100,null=True,blank=True)   
+    course_class_id = models.CharField(max_length=100,null=True,blank=True)
+
     teacher = models.ForeignKey(instructor, on_delete=models.CASCADE,blank=True, null=True)
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
     periods = models.ManyToManyField(periods, blank=True, null=True)
-    start_date = models.DateField(null=True,blank=True)
+
+    start_date = models.DateField(null=True, blank=True)
+
     end_date = models.DateField(null=True,blank=True)
 
 
     course_type = [
         ("online", "online"),
         ("On site", "On site"),
-        ("On site", "On site"),
     ]
 
 
     type = models.CharField(max_length=100,choices=course_type ,default='online',null=True)
+
     active = models.BooleanField(default=True)
-    capacity = models.IntegerField(null=True, default=5)
+
+    capacity = models.IntegerField(null=True,default=5)
+
     enrolled  =  models.IntegerField(null=True,blank=True)
-    full =  models.BooleanField(default=False)
+
     payment = models.ImageField(upload_to='payment_images/', blank=True, null=True)
 
 
     def save(self, *args, **kwargs):
-
+        
         self.enrolled = self.get_pupl_total
+
         self.course_class_id = f"ENG00{self.pk}"
 
-        if self.capacity >= self.enrolled:
-            self.full = True
-        else:
-            self.full = False
-
-        # teacher_count=ActiveCourse.objects.filter(teacher=self.teacher,active=True).count()
-        # self.teacher.count = teacher_count
-        # self.teacher.save()
-        # Call the save method of the associated instructor instance
-
-        
         super().save(*args, **kwargs)
 
         if self.teacher:
             self.teacher.save()
 
+    @property
+    def all_periods_list(self):
+        all_periods = periods.objects.all()
+        selected_periods = self.periods.all()
 
+        # Create a list of dictionaries with period information and chosen flag
+        all_periods_list = [
+            {'period': period, 'chosen': period in selected_periods}
+            for period in all_periods
+        ]
+        return all_periods_list
+   
+    @property
+    def unique_days_and_start_at(self):
+        unique_days = []
+        unique_start_at = []
+
+        for period_info in self.all_periods_list:
+            period = period_info['period']
+            if period.day not in unique_days:
+                unique_days.append(period.day)
+            if period.start_at not in unique_start_at:
+                unique_start_at.append(period.start_at)
+
+        return {
+            'unique_days': unique_days,
+            'unique_start_at': unique_start_at,
+        }
+    
+    
     @property
     def get_pupl_total(self):
         try:
@@ -145,7 +176,8 @@ class pupl(models.Model):
         with open(template_path, 'r') as file:
             email_content = file.read()
 
-        email_content = email_content.format(course=self.active.course, name=self.name, date='123')
+
+        email_content = email_content.format(course=self.active.course, name=self.name, date=self.active.start_date)
 
 
         send_mail(
@@ -157,6 +189,7 @@ class pupl(models.Model):
             html_message=email_content,
         )
 
+ 
 
     def save(self, *args, **kwargs):
 

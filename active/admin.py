@@ -15,6 +15,19 @@ class PuplInline(admin.StackedInline):
 
 
 
+
+class PuplAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'email','payment')
+    search_fields = ('name', 'phone', 'email')
+    list_filter = ('active',)
+
+
+
+
+
+
+
+
 class ActiveCourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'teacher', 'course', 'get_future_date','GetPeriods',"capcity")
     inlines = [PuplInline]
@@ -56,7 +69,7 @@ class InstructorAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ActiveCourse, ActiveCourseAdmin)
-admin.site.register(pupl)
+admin.site.register(pupl,PuplAdmin)
 admin.site.register(instructor,InstructorAdmin)
 
 

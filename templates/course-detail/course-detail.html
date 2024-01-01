@@ -159,40 +159,24 @@
 				<div class="content-column col-lg-8 col-md-12 col-sm-12">
 
 
-				<div class="submit-form" style="display:none">
-										
-						<label for="name">Name:</label>
-						<input type="text" id="name" name="name" placeholder="Your name..." required><br><br>
-				
-						<label for="phone">Phone:</label>
-						<input type="tel" id="phone" name="phone" placeholder="phone number" required><br><br>
-				
-						<label for="email">Email:</label>
-						<input type="email" id="email" name="email"  placeholder="email" required><br><br>
+					<div class="submit-form" style="display:none">
+											
+							<label for="name">Name:</label>
+							<input type="text" id="name" name="name" placeholder="Your name..." required><br><br>
+					
+							<label for="phone">Phone:</label>
+							<input type="tel" id="phone" name="phone" placeholder="phone number" required><br><br>
+					
+							<label for="email">Email:</label>
+							<input type="email" id="email" name="email"  placeholder="email" required><br><br>
+							
+							<label for="datepicker">Choose a date:</label>
+							<input readonly type="text" id="datepicker" name="datepicker" placeholder="Select a date">
 
+							<br><br>
 
-										
-						<!-- First Multi-Select Tag -->
-						<label for="select1">Select Your prefare time </label>
-						<select id="select1" name="select1" multiple>
-							{%for i in periods%}
-								<option value="{{i.id}}">{{i}}</option>
-							{%endfor%}
-						</select>
-
-						<!-- Second Multi-Select Tag -->
-						<label for="select2">Selected  </label>
-						<select id="select2" name="select2" multiple>
-
-						</select>
-
-						<br><br>
-
-						<label for="datepicker">Choose a date:</label>
-						<input type="text" id="datepicker" name="datepicker" placeholder="Select a date" required>
-
-				
-						<input type="submit" value="Submit" id="submitButton">
+					
+							<input type="submit" value="Submit" id="submitButton">
 				</div>
 
 
@@ -596,7 +580,7 @@ enrollButton.addEventListener("click", function (e) {
 
 </script>
 
-
+<!-- 
 
 
 <script>
@@ -632,81 +616,81 @@ enrollButton.addEventListener("click", function (e) {
     // Add event listeners to both select elements
     select1.addEventListener("dblclick", transferOptionsFromSelect1ToSelect2);
     select2.addEventListener("dblclick", transferOptionsFromSelect2ToSelect1);
-</script>
+</script> -->
+
+	<script>
+		// Get a reference to the submit button
+		const submitButton = document.getElementById('submitButton');
+
+		// Add a click event listener to the submit button
+		submitButton.addEventListener('click', function(event) {
+			event.preventDefault(); // Prevent the form from submitting
+
+			// Get the values of the input fields
+			const name = document.getElementById('name').value;
+			const phone = document.getElementById('phone').value;
+			const email = document.getElementById('email').value;
+			const startDate = document.getElementById('datepicker').value;
+
+			// Check if any of the required fields is empty
+			if (!name || !phone || !email || !startDate) {
+				alert('Please fill in all required fields.');
+				return;
+			}
+
+			var userFormData = {
+				"Name": name,
+				"Phone": phone,
+				"Email": email,
+				"course_id": {{course.pk}},
+				'startDate': startDate
+			};
+
+			var url = '/courses/' + '{{course.pk}}' + '/submit_form';
+
+			fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": 'application/json',
+					'X-CSRFToken': csrftoken,
+				},
+				body: JSON.stringify({ 'form': userFormData })
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					const dataString = JSON.stringify(data);
+					console.log(dataString["message"]);
+					alert(dataString);
+
+					// You can redirect or perform additional actions after a successful submission
+				});
+		});
+
+	</script>
 
 <script>
-	// Get a reference to the submit button
-	const submitButton = document.getElementById('submitButton');
+    function enableDatepicker() {
+        // Remove the disabled attribute from the input field
+        document.getElementById('datepicker').removeAttribute('disabled');
+    }
 
-	// Add a click event listener to the submit button
-	submitButton.addEventListener('click', function(event) {
-		event.preventDefault(); // Prevent the form from submitting
-
-		// Get the values of the input fields
-		const name = document.getElementById('name').value;
-		const phone = document.getElementById('phone').value;
-		const email = document.getElementById('email').value;
-		const startDate = document.getElementById('datepicker').value;
-
-
-
-		// Get the selected options from the second select element
-		const select2 = Array.from(document.getElementById('select2')).map(option => option.value);
-
-		
-		var userFormData = {
-			"Name":null,
-			"Phone":null,
-			"Email":null,
-			"periods":null,
-			"course_id":{{course.pk}},
-			'startDate':null
-		}
-
-		userFormData.Name = name
-		userFormData.Phone = phone
-		userFormData.Email = email
-		userFormData.periods = select2
-		userFormData.startDate = startDate
-		
-
-
-		var url = '/courses/' + '{{course.pk}}' + '/submit_form'
-
-		fetch(url,{
-			method:"POST",
-			headers:{
-				"Content-Type":'application/json',
-				'X-CSRFToken':csrftoken,
-			},
-			body:JSON.stringify({'form':userFormData})
-		})
-		.then((response) => response.json())
-		.then((data) => {
-			const dataString = JSON.stringify(data);
-			console.log(dataString["message"]) 
-			alert(dataString) 
-
-		})
-		
-	});
-</script>
-
-
-
-
-
-<script>
     $(function() {
+        // Get today's date
+        var today = new Date();
+
+        // Calculate the date one week from now
+        var oneWeekLater = new Date();
+        oneWeekLater.setDate(today.getDate() + 7);
+
         // Initialize the datepicker
         $("#datepicker").datepicker({
             dateFormat: "yy-mm-dd", // Choose your desired date format
             changeMonth: true,
             changeYear: true,
+            minDate: oneWeekLater, // Set the minimum selectable date to one week from now
         });
     });
 </script>
-
 
 
 

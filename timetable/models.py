@@ -30,9 +30,13 @@ class Classes(models.Model):
         return de
 
     def save(self, *args, **kwargs):
+
         days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
         is_new = not self.pk
+
         super().save(*args, **kwargs)
+
         if is_new:
             start_time = datetime(
                 year=datetime.today().year,
@@ -41,21 +45,30 @@ class Classes(models.Model):
                 hour=9,
             )
 
-            for a in days_of_week:  
+            for a in days_of_week:
+
                 for i in range(self.numberOfPeriods):
+                        
                         period_name = f"period{i+1}"
+
                         period_start_time = start_time + timedelta(hours=i)
+
                         period_end_time = start_time + timedelta(hours=i + 1)
+
                         period_week_number = period_start_time.isocalendar()[1]
+
                         day_name = a 
                         
                         period = periods(
+
                             Classes=self,
                             name=period_name,
                             start_at=period_start_time,
                             end_at=period_end_time,
                             day = day_name
+
                         )
+                        
                         period.save()
             self.numOfweek = period_week_number
             self.save()

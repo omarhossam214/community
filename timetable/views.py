@@ -17,81 +17,19 @@ from dateutil import parser
 
 from datetime import timedelta
 from django.forms.models import model_to_dict
-
+from.models import periods
 import json
 
 
 
 
-
-# def index(request):
-# #     data = []
-# #     json_data = []
-
-# #     df = pd.DataFrame(columns=['Future Date', 'Course', 'Students', 'Teacher'])
-
-# #     today = datetime.date.today()
-
-
-# #     active_courses = ActiveCourse.objects.all()  # Sort by periods' start_at field
-# #     teacher = Staff.objects.all()
-# #     courses = Course.objects.all()
-
-# #     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-# #     months = [
-# #     "January", "February", "March", "April", "May", "June",
-# #     "July", "August", "September", "October", "November", "December"
-# # ]
-# #     period = periods.objects.all()
-# #     staff  = Staff.objects.all()
-
-
-# #     for i in active_courses:
-    
-# #         students = i.student.all()
-# #         stud = []
-# #         for student in students:
-# #             stud.append(student.name)
-
-# #         pers = i.periods.all()
-# #         for a in pers: 
-# #             future_date = parser.parse(a.get_future_date())  
-# #             start_time = a.start_at  
-
-# #             hour = start_time.hour
-# #             minute = start_time.minute
-
-# #             future_date = future_date.replace(hour=hour, minute=minute)
-
-         
-
-# #             data.append({
-# #                             'Future Date': future_date.strftime("%A, %d %B %Y %H:%M"),
-# #                             'Course': i.course.name,
-# #                             'Students': stud,
-# #                             'Teacher': i.teacher.name
-# #                         })
-            
-# #         sorted_data = sorted(data, key=lambda x: x['Future Date'])
-
-
-# #     json_data = json.dumps(sorted_data)
-# #     print(type(json_data))
-
-#     return render(request, 'timetable/timetable.html')
-
-
-
-
-
-
 def index(request):
+    test = ActiveCourse.objects.all()
 
-    return render(request, 'timetable/timetable.html')
+    for active_course_instance in test:
+        print(active_course_instance.all_periods_list)
 
-
-
-
+    return render(request, 'timetable/timetable.html',{'test':test})
 
 
 

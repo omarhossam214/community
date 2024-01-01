@@ -1,604 +1,193 @@
-
 {% extends "admin/base_site.html" %}
 
 
-{% block sidebar %}
-<!-- 
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<script type="text/javascript">
-    var user = '{{request.user}}';
-
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-</script>
 <style>
-  body{margin-top:20px;}
-.event-schedule-area .section-title .title-text {
-    margin-bottom: 50px;
-}
 
-.event-schedule-area .tab-area .nav-tabs {
-    border-bottom: inherit;
-}
-
-.event-schedule-area .tab-area .nav {
-    border-bottom: inherit;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    margin-top: 80px;
-}
-
-.event-schedule-area .tab-area .nav-item {
-    margin-bottom: 75px;
-}
-.event-schedule-area .tab-area .nav-item .nav-link {
-    text-align: center;
-    font-size: 22px;
-    color: #333;
-    font-weight: 600;
-    border-radius: inherit;
-    border: inherit;
-    padding: 0px;
-    text-transform: capitalize !important;
-}
-.event-schedule-area .tab-area .nav-item .nav-link.active {
-    color: #4125dd;
-    background-color: transparent;
-}
-
-.event-schedule-area .tab-area .tab-content .table {
-    margin-bottom: 0;
-    width: 80%;
-}
-.event-schedule-area .tab-area .tab-content .table thead td,
-.event-schedule-area .tab-area .tab-content .table thead th {
-    border-bottom-width: 1px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #252525;
-}
-.event-schedule-area .tab-area .tab-content .table td,
-.event-schedule-area .tab-area .tab-content .table th {
-    border: 1px solid #b7b7b7;
-    padding-left: 30px;
-}
-.event-schedule-area .tab-area .tab-content .table tbody th .heading,
-.event-schedule-area .tab-area .tab-content .table tbody td .heading {
-    font-size: 16px;
-    text-transform: capitalize;
-    margin-bottom: 16px;
-    font-weight: 500;
-    color: #252525;
-    margin-bottom: 6px;
-}
-.event-schedule-area .tab-area .tab-content .table tbody th span,
-.event-schedule-area .tab-area .tab-content .table tbody td span {
-    color: #4125dd;
-    font-size: 18px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    display: block;
-}
-.event-schedule-area .tab-area .tab-content .table tbody th span.date,
-.event-schedule-area .tab-area .tab-content .table tbody td span.date {
-    color: #656565;
-    font-size: 14px;
-    font-weight: 500;
-    margin-top: 15px;
-}
-.event-schedule-area .tab-area .tab-content .table tbody th p {
-    font-size: 14px;
-    margin: 0;
-    font-weight: normal;
-}
-
-.event-schedule-area-two .section-title .title-text h2 {
-    margin: 0px 0 15px;
-}
-
-.event-schedule-area-two ul.custom-tab {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 30px;
-}
-.event-schedule-area-two ul.custom-tab li {
-    margin-right: 70px;
-    position: relative;
-}
-.event-schedule-area-two ul.custom-tab li a {
-    color: #252525;
-    font-size: 25px;
-    line-height: 25px;
-    font-weight: 600;
-    text-transform: capitalize;
-    padding: 35px 0;
-    position: relative;
-}
-.event-schedule-area-two ul.custom-tab li a:hover:before {
-    width: 100%;
-}
-.event-schedule-area-two ul.custom-tab li a:before {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    content: "";
-    background: #4125dd;
-    width: 0;
-    height: 2px;
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
-    transition: all 0.4s;
-}
-.event-schedule-area-two ul.custom-tab li a.active {
-    color: #4125dd;
-}
-
-.event-schedule-area-two .primary-btn {
-    margin-top: 40px;
-}
-
-.event-schedule-area-two .tab-content .table {
-    -webkit-box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0;
-}
-.event-schedule-area-two .tab-content .table thead {
-    background-color: #007bff;
-    color: #fff;
-    font-size: 20px;
-}
-.event-schedule-area-two .tab-content .table thead tr th {
-    padding: 20px;
-    border: 0;
-}
-.event-schedule-area-two .tab-content .table tbody {
-    background: #fff;
-}
-.event-schedule-area-two .tab-content .table tbody tr.inner-box {
-    border-bottom: 1px solid #dee2e6;
-}
-.event-schedule-area-two .tab-content .table tbody tr th {
-    border: 0;
-    padding: 30px 20px;
-    vertical-align: middle;
-}
-.event-schedule-area-two .tab-content .table tbody tr th .event-date {
-    color: #252525;
-    text-align: center;
-}
-.event-schedule-area-two .tab-content .table tbody tr th .event-date span {
-    font-size: 50px;
-    line-height: 50px;
-    font-weight: normal;
-}
-.event-schedule-area-two .tab-content .table tbody tr td {
-    padding: 30px 20px;
-    vertical-align: middle;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .r-no span {
-    color: #252525;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap h3 a {
-    font-size: 20px;
-    line-height: 20px;
-    color: #cf057c;
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
-    transition: all 0.4s;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap h3 a:hover {
-    color: #4125dd;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .categories {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    margin: 10px 0;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .categories a {
-    color: #252525;
-    font-size: 16px;
-    margin-left: 10px;
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
-    transition: all 0.4s;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .categories a:before {
-    content: "\f07b";
-    font-family: fontawesome;
-    padding-right: 5px;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .time span {
-    color: #252525;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .organizers {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    margin: 10px 0;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .organizers a {
-    color: #4125dd;
-    font-size: 16px;
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
-    transition: all 0.4s;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .organizers a:hover {
-    color: #4125dd;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-wrap .organizers a:before {
-    content: "\f007";
-    font-family: fontawesome;
-    padding-right: 5px;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .primary-btn {
-    margin-top: 0;
-    text-align: center;
-}
-.event-schedule-area-two .tab-content .table tbody tr td .event-img img {
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-}
-
-    /* Add space between dropdown menus */
-    .dropdown-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px; /* Adjust the margin as needed for spacing */
+    $accent-base: #8eeec0;
+    $cutty-sark: #546E7A;
+    $porcelain: #ECEFF1;
+    $accents: (
+      pink: adjust-hue($accent-base, -180%),
+      orange: adjust-hue($accent-base, -120%),
+      green: adjust-hue($accent-base, -60%),
+      cyan: $accent-base,
+      blue: adjust-hue($accent-base, 60%),
+      purple: adjust-hue($accent-base, 120%),
+    );
+    
+    @function make-gradient($color){
+      @return linear-gradient(135deg, $color, adjust-hue($color, 40%));
     }
     
-    /* Style individual dropdowns */
-    select {
-        width: 150px; /* Adjust the width as needed */
+    @mixin make-tiles{
+      @each $name, $value in $accents{
+        .accent-#{$name}-gradient{
+          display: flex;
+          width: 100%;
+          height: 100%;
+          background: make-gradient($value);
+          transition: .2s ease box-shadow, .2s ease transform;
+          &:hover{
+            box-shadow: 0 20px 30px 0 transparentize($value, 0.7);
+            transform: scale(1.05);
+          }
+        }
+      }
     }
-</style> -->
+    
+    html, body{
+      margin: 0;
+      font-family: 'Karla';
+      color: $cutty-sark;
+    }
+    
+    *{
+      box-sizing: border-box;
+    }
+    
+    .timetable{
+      @include make-tiles;
+      display: grid;
+      grid-template-areas: ". week"
+                           "time content";
+      grid-template-columns: 120px;
+      grid-template-rows: 60px;
+      width: 100vw;
+      height: 100vh;
+      .weekend {
+        background: lighten($porcelain, 5%);
+        color: lighten($cutty-sark, 20%);
+      }
+      .week-names{
+        grid-area: week;
+        display: grid;
+        // 7 days a week
+        grid-template-columns: repeat(7, 1fr);
+        text-transform: uppercase;
+        font-size: 12px;
+        & > div{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          box-shadow: inset 1px 0 0 $porcelain;
+        }
+      }
+      .time-interval{
+        grid-area: time;
+        display: grid;
+        // 6 time intervals
+        grid-template-rows: repeat(6, 1fr); 
+        font-size: 14px;
+        & > div{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          box-shadow: inset 0 1px 0 0 $porcelain;
+        }
+      }
+      .content{
+        grid-area: content;
+        display: grid;
+        grid-template-rows: repeat(6, 1fr); 
+        grid-template-columns: repeat(7, 1fr);
+        & > div{
+           box-shadow: inset 1px 0 0 $porcelain, inset 0 1px 0 0 $porcelain;
+        }
+      }
+    }
 
-<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 
+</style>
 
-<!-- First Dropdown Menu -->
-<label for="first-dropdown">Teacher:</label>
-<select id="first-dropdown" name="first-dropdown">
-    <option value="option1">-ALL tachers-</option>
-    {%for i in teacher%}
-    <option value="{{i.id}}">{{i.name}}</option>
-    {%endfor%}
-</select>
-
-<!-- Second Dropdown Menu -->
-<label for="second-dropdown">Month:</label>
-<select id="second-dropdown" name="second-dropdown">
-    {%for i in months%}
-    <option value="optionC">{{i}}</option>
-    {%endfor%}
-</select>
+<h1>sissssssssssssssssssss</h1>
 
 
 
-<!-- third Dropdown Menu -->
-<label for="second-dropdown">course:</label>
-<select id="second-dropdown" name="second-dropdown">
-    <option value="option1">-ALL courses-</option>
-    {%for i in courses%}
-    <option value="{{i.id}}">{{i}}</option>
-    {%endfor%}
-</select>
-
-<br><br>
-
-    <!-- First Multi-Select Tag -->
-    <label for="select1">Select </label>
-    <select id="select1" name="select1" multiple>
-   
-    </select>
-
-    <!-- Second Multi-Select Tag -->
-    <label for="select2">Select </label>
-    <select id="select2" name="select2" multiple>
-    </select>
-
-    <br><br>
-
-    <!-- Create Schedule Button -->
-    <div>
-    <button id="create-schedule">Create Schedule</button>
-    <br>
-    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-    <label for="vehicle1"> submit the Schedule </label>
+<div class="timetable">
+    <div class="week-names">
+        <div>monday</div>
+        <div>tuesday</div>
+        <div>wednesday</div>
+        <div>thursday</div>
+        <div>friday</div>
+        <div class="weekend">saturday</div>
+        <div class="weekend">sunday</div>
     </div>
-
-    <br><br>
-    <br><br>
-
-<div class="event-schedule-area-two bg-color pad100">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title text-center">
-                    <div class="title-text">
-                        <h2>Event Schedule</h2>
-                    </div>
-                
-                </div>
-            </div>
-            <!-- /.col end-->
+    <div class="time-interval">
+        <div>8:00 - 10:00</div>
+        <div>10:00 - 12:00</div>
+        <div>12:00 - 14:00</div>
+        <div>14:00 - 16:00</div>
+        <div>16:00 - 18:00</div>
+        <div>18:00 - 20:00</div>
+    </div>
+    <div class="content">
+        <div>
+            <div class="accent-orange-gradient"></div>
         </div>
-        <!-- row end-->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade active show" id="home" role="tabpanel">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" scope="col">Date</th>
-                                        <th scope="col">Speakers</th>
-                                        <th scope="col">Session</th>
-                                        <th scope="col">Venue</th>
-                                        <th class="text-center" scope="col">Venue</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for i in active_courses %}
-                                        {%for a in i.periods.all%}
-                             
-                                            <tr  id="periods-container" data-future-date="{{ a.get_future_date }} class="inner-box">
-                                                <th scope="row">
-                                                    <div class="event-date">
-                                                        <span>{{a.get_future_date|slice:":2" }}</span>
-                                                        <p>{{a.get_future_date|slice:"2:" }}</p>
-                                                    </div>
-                                                </th>
-                                                <td>
-                                                    <div class="event-img">
-                                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="event-wrap">
-                                                        <h3><a href="/admin/courses/course/{{i.course.id}}/change/"> {{i.course}} </a></h3>
-                                                        <div class="meta">
-                                                            <div class="organizers">
-                                                                <a href="/admin/team/staff/{{i.teacher.id}}/change/">{{i.teacher}}</a>
-                                                            </div>
-                                                            <div class="categories">
-                                                                <a href="#" class="toggle-students">Show Students</a>
-                                                                <ul class="student-list" style="display: none;">
-                                                                    {% for student in i.student.all %}
-                                                                        <li>{{ student.name }}</li>
-                                                                    {% endfor %}
-                                                                </ul>
-                                                            </div>
-                                                            <div class="time">
-                                                                <span>{{a.start_at}} - {{a.end_at}} 1 H'</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="r-no">
-                                                        <span>{{i.type}}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="primary-btn">
-                                                        <a class="btn btn-primary" href="/admin/active/activecourse/{{i.id}}/change/">Read More</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {%endfor%}
-                                    {%endfor%}
-                
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="primary-btn text-center">
-                    <a href="#" class="btn btn-primary">Download Schedule</a>
-                </div>
-            </div>
-            <!-- /col end-->
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>
+            <div class="accent-green-gradient"></div>
         </div>
-        <!-- /row end-->
+        <div class="weekend"></div>
+        <div class="weekend"></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>
+            <div class="accent-cyan-gradient"></div>
+        </div>
+        <div></div>
+        <div class="weekend"></div>
+        <div class="weekend"></div>
+        <div>
+            <div class="accent-pink-gradient"></div>
+        </div>
+        <div></div>
+        <div>
+            <div class="accent-purple-gradient"></div>
+        </div>
+        <div></div>
+        <div></div>
+        <div class="weekend"></div>
+        <div class="weekend"></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="weekend"></div>
+        <div class="weekend"></div>
+        <div>
+            <div class="accent-purple-gradient"></div>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="weekend"></div>
+        <div class="weekend"></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="weekend"></div>
+        <div class="weekend"></div>
     </div>
 </div>
 
 
 
-<script>
-    // Add an event listener to all "Show Students" links
-    var toggleLinks = document.querySelectorAll('.toggle-students');
-    
-    toggleLinks.forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
-            
-            // Find the corresponding student list element
-            var studentList = event.target.nextElementSibling;
-            
-            // Toggle the visibility of the student list
-            if (studentList.style.display === 'none' || studentList.style.display === '') {
-                studentList.style.display = 'block';
-            } else {
-                studentList.style.display = 'none';
-            }
-        });
-    });
-</script>
 
 
-<script>
-    // Add an event listener to the select element
-    document.getElementById("first-dropdown").addEventListener("change", function () {
-        // Get the selected option
-        var selectedOption = this.options[this.selectedIndex];
-        
-        // Log the selected value to the console
-
-        var userFormData = {
-            "teacher_id": null,
-            "month_id": null,
-            "course_id": null,
-        }
-
-        userFormData.teacher_id = selectedOption.value;
-
-
-        var url = '/timetable/process_schedule';
-
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            body: JSON.stringify({ 'form': userFormData })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the JSON response data here (students_with_shared_periods_courses)
-         
-            data = JSON.parse(data)
-            console.log(data)
-
-            var select1 = document.getElementById("select1");
-            var select2 = document.getElementById("select2");
-
-
-            select1.innerHTML = '';
-            select2.innerHTML = '';
-
-            for (const i in data) {
-                var option = document.createElement("option");
-                option.text = data[i].fields.name
-                option.value = data[i].pk
-                select1.appendChild(option);
-              }
-              
-        });
-    });
-</script>
-
-
-
-<script>
-    const select1 = document.getElementById("select1");
-    const select2 = document.getElementById("select2");
-
-    // Function to transfer selected options from select1 to select2
-    function transferOptionsFromSelect1ToSelect2() {
-        const selectedOption = select1.options[select1.selectedIndex];
-        if (selectedOption) {
-            // Clone the selected option and append it to select2
-            const clonedOption = selectedOption.cloneNode(true);
-            select2.appendChild(clonedOption);
-
-            // Remove the selected option from select1
-            select1.removeChild(selectedOption);
-        }
-    }
-
-    // Function to transfer selected options from select2 to select1
-    function transferOptionsFromSelect2ToSelect1() {
-        const selectedOption = select2.options[select2.selectedIndex];
-        if (selectedOption) {
-            // Clone the selected option and append it to select1
-            const clonedOption = selectedOption.cloneNode(true);
-            select1.appendChild(clonedOption);
-
-            // Remove the selected option from select2
-            select2.removeChild(selectedOption);
-        }
-    }
-
-    // Add event listeners to both select elements
-    select1.addEventListener("dblclick", transferOptionsFromSelect1ToSelect2);
-    select2.addEventListener("dblclick", transferOptionsFromSelect2ToSelect1);
-</script>
-
-
-
-
-
-
-<!-- 
-<script type="text/javascript">
-    var form = document.getElementById('test')
-    var customer = '{{customr.id}}';
-    
-    var product = '{{item.id}}';
-    console.log(product)
-    console.log(customer)
-    form.addEventListener('submit',function(e){
-        e.preventDefault()
-       
-        console.log(product)
-        console.log(customer)
-        console.log(form.reivew.value)
-                
-        var userFormData = {
-            "review":null,
-            "product_id":null,
-            "customer_id":null,
-        }
-
-
-        userFormData.review = form.reivew.value
-        userFormData.product_id = product
-        userFormData.customer_id = customer
-
-        
-        console.log(userFormData)
-
-        var url = '/shop/' + product + '/process_review';
-        console.log(url)
-        fetch(url,{
-            method:"POST",
-            headers:{
-                "Content-Type":'application/json',
-                'X-CSRFToken':csrftoken,
-            },
-            body:JSON.stringify({'form':userFormData})
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            window.location.href = '/shop/' + product 
-
-        })
-
-        
-    })
-
-
-</script> -->
+{% block sidebar %}
 
 
 {% endblock %}
-
