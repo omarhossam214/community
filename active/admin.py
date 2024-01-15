@@ -3,7 +3,9 @@ from .models import *
 
 # Register your models here.
 from django.contrib import admin
-from .models import ActiveCourse,instructor
+from .models import ActiveCourse,instructor,ActiveCoursePeriod
+from django.utils.html import format_html
+from django.urls import reverse
 from django.utils.html import format_html
 
 
@@ -28,10 +30,33 @@ class PuplAdmin(admin.ModelAdmin):
 
 
 
-class ActiveCourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'teacher', 'course', 'get_future_date','GetPeriods',"capcity")
-    inlines = [PuplInline]
+class ActiveCoursePeriodInline(admin.TabularInline):  # or admin.StackedInline
+    model = ActiveCoursePeriod
+    exclude = ['content']
+    extra = 1  # Set the number of inline forms to display
 
+
+
+
+
+
+
+
+
+
+class ActiveCourseAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'teacher', 'course', 'get_future_date','GetPeriods',"capcity")
+    inlines = [PuplInline,ActiveCoursePeriodInline]
+    list_display = ['course_class_id', 'teacher_name', 'view_active_course_periods']
+
+    
+    def teacher_name(self, obj):
+        return obj.teacher.name if obj.teacher else None
+    
+    def view_active_course_periods(self, obj):
+        url = reverse('admin:active_activecourseperiod_changelist')
+        return format_html('<a href="{}?active_course__id={}">View ActiveCoursePeriods</a>', url, obj.id)
 
     def capcity(self, obj):
         show = str(obj.get_pupl_total) + '/' + str (obj.capacity)
@@ -68,9 +93,20 @@ class InstructorAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
+
+
 admin.site.register(ActiveCourse, ActiveCourseAdmin)
 admin.site.register(pupl,PuplAdmin)
 admin.site.register(instructor,InstructorAdmin)
+admin.site.register(ActiveCoursePeriod)
 
 
 #kkkkkk

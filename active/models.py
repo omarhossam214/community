@@ -19,8 +19,12 @@ from django_rq import job
 #
 from django.db.models import Count
 
+from django_summernote.fields import SummernoteTextField
 
 
+from django_summernote.widgets import SummernoteWidget
+
+from ckeditor.fields import RichTextField
 
 
 
@@ -39,11 +43,21 @@ class instructor(models.Model):
 
     count = models.IntegerField(null=True,blank=True,default = 0)
 
+    shifts =  [
+       ("Morning", "Morning"),
+        ("Night", "Nght"),
+        ('Any','Any')
+    ]
+
+    ShiftChoices = models.CharField(max_length=100,choices=shifts ,default='Any',null=True)
+
  
     @classmethod
     def get_instructor_with_less_count(cls):
         """
         Get the ID of the instructor with the least count among all assigned instructors.
+
+        add the course paramater , and the shift paramater 
         """
         instructors_with_counts = cls.objects.exclude(count__isnull=True).order_by('count')
 
@@ -76,7 +90,7 @@ class ActiveCourse(models.Model):
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    periods = models.ManyToManyField(periods, blank=True, null=True)
+    periods = models.ManyToManyField(periods, blank=True, null=True, through='ActiveCoursePeriod')
 
     start_date = models.DateField(null=True, blank=True)
 
@@ -100,6 +114,18 @@ class ActiveCourse(models.Model):
     payment = models.ImageField(upload_to='payment_images/', blank=True, null=True)
 
 
+    
+    shifts =  [
+       ("Morning", "Morning"),
+        ("Night", "Nght"),
+        ('Any','Any')
+    ]
+
+    ShiftChoices = models.CharField(max_length=100,choices=shifts ,default='Any',null=True)
+
+ 
+
+
     def save(self, *args, **kwargs):
         
         self.enrolled = self.get_pupl_total
@@ -110,6 +136,7 @@ class ActiveCourse(models.Model):
 
         if self.teacher:
             self.teacher.save()
+
 
     @property
     def all_periods_list(self):
@@ -122,9 +149,11 @@ class ActiveCourse(models.Model):
             for period in all_periods
         ]
         return all_periods_list
-   
+
+
     @property
     def unique_days_and_start_at(self):
+
         unique_days = []
         unique_start_at = []
 
@@ -150,6 +179,10 @@ class ActiveCourse(models.Model):
             return 0
         
 
+    @job
+    def notify_teacher_indication(self):
+        
+        return
 
     
 
@@ -165,11 +198,24 @@ class pupl(models.Model):
 
     payment = models.ImageField(upload_to='payment_images/', blank=True, null=True)
 
+    
+    shifts =  [
+       ("Morning", "Morning"),
+        ("Night", "Nght"),
+        ('Any','Any')
+    ]
+
+    ShiftChoices = models.CharField(max_length=100,choices=shifts ,default='Any',null=True)
+
+ 
+
 
     @job
     def send_email_background(self):
         
         base_directory = settings.BASE_DIR
+
+
 
         template_path = os.path.join(base_directory, 'courses', 'email_template.txt')
 
@@ -177,7 +223,9 @@ class pupl(models.Model):
             email_content = file.read()
 
 
-        email_content = email_content.format(course=self.active.course, name=self.name, date=self.active.start_date)
+        email_content = email_content.format(
+            course=self.active.course, name=self.name, date=self.active.start_date,Instructor_Name = self.active.teacher.name
+            )
 
 
         send_mail(
@@ -198,3 +246,37 @@ class pupl(models.Model):
         super().save(*args, **kwargs)
     
  
+
+
+
+
+
+
+class ActiveCoursePeriod(models.Model):
+
+    active_course = models.ForeignKey(ActiveCourse, on_delete=models.CASCADE)
+
+    period = models.ForeignKey(periods, on_delete=models.CASCADE)
+
+    #additional_field = models.CharField(max_length=100)  # Add your additional fields here
+
+    teacher = models.ForeignKey(instructor, on_delete=models.CASCADE,blank=True, null=True)
+
+    content = RichTextField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('active_course', 'period')
+
+
+
+    def save(self, *args, **kwargs):
+        if not self.teacher and self.active_course:
+            self.teacher = self.active_course.teacher
+        super().save(*args, **kwargs)
+
+
+
+
+
+
+    

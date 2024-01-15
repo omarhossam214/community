@@ -50,7 +50,7 @@ def submit_form(request, pk):
     phone = data['form']['Phone']
     email = data['form']['Email']
     start_date = data['form']['startDate']
-
+    shift = data['form']['shift']
 
     # Get an instructor with the least number of active courses
     instructor_id_with_less_count = instructor.get_instructor_with_less_count()
@@ -59,7 +59,7 @@ def submit_form(request, pk):
     activecourse, created_1 = ActiveCourse.objects.get_or_create(
         course=course,
         teacher=instructor_id_with_less_count,
-        start_date = start_date 
+        start_date = start_date,
     )
 
     # Get or create an ActiveStudent instance for the given activecourse, phone, name, and email
@@ -82,6 +82,8 @@ def submit_form(request, pk):
     # Calculate and print the runtime
     runtime = end_time - start_time
     print(f"Runtime: {runtime} seconds")
+    print(shift)
+
 
     # Return the JsonResponse or other response as needed
     return JsonResponse({'message': 'The student is already enrolled'})

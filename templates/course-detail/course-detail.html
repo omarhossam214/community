@@ -15,11 +15,21 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Your other head elements go here -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <!-- Add your CSS styles for the loading animation here -->
+
 </head>
 
 
 <style>
     /* Add your existing CSS styles here */
+
+	#loading {
+		display: none;
+	}
 
     /* Style for the date picker input */
     #datepicker {
@@ -38,6 +48,17 @@
     #datepicker {
         margin-right: 10px;
     }
+
+
+	#daytime {
+		width: 200px; /* Set the width as needed */
+		height: 50px;
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+		font-size: 16px;
+	}
 </style>
 
 
@@ -173,7 +194,18 @@
 							<label for="datepicker">Choose a date:</label>
 							<input readonly type="text" id="datepicker" name="datepicker" placeholder="Select a date">
 
+
+							<!-- Dropdown for Morning/Night -->
+							<label for="daytime">Choose a time:</label>
+							<select id="daytime" name="daytime">
+								<option value="morning">Morning</option>
+								<option value="night">Night</option>
+								<option value="any" selected>any</option>
+							</select><br><br>
+
 							<br><br>
+
+
 
 					
 							<input type="submit" value="Submit" id="submitButton">
@@ -580,93 +612,65 @@ enrollButton.addEventListener("click", function (e) {
 
 </script>
 
-<!-- 
+
+<div id="loading">
+    <img src="https://cdn.dribbble.com/users/255512/screenshots/2215917/animation.gif" alt="Loading..." />
+</div>
 
 
 <script>
-    const select1 = document.getElementById("select1");
-    const select2 = document.getElementById("select2");
+	// Get a reference to the submit button
+	const submitButton = document.getElementById('submitButton');
 
-    // Function to transfer selected options from select1 to select2
-    function transferOptionsFromSelect1ToSelect2() {
-        const selectedOption = select1.options[select1.selectedIndex];
-        if (selectedOption) {
-            // Clone the selected option and append it to select2
-            const clonedOption = selectedOption.cloneNode(true);
-            select2.appendChild(clonedOption);
+	// Add a click event listener to the submit button
+	submitButton.addEventListener('click', function(event) {
+		event.preventDefault(); // Prevent the form from submitting
 
-            // Remove the selected option from select1
-            select1.removeChild(selectedOption);
-        }
-    }
+		// Get the values of the input fields
+		const name = document.getElementById('name').value;
+		const phone = document.getElementById('phone').value;
+		const email = document.getElementById('email').value;
+		const startDate = document.getElementById('datepicker').value;
+		const shift = document.getElementById('daytime').value;
 
-    // Function to transfer selected options from select2 to select1
-    function transferOptionsFromSelect2ToSelect1() {
-        const selectedOption = select2.options[select2.selectedIndex];
-        if (selectedOption) {
-            // Clone the selected option and append it to select1
-            const clonedOption = selectedOption.cloneNode(true);
-            select1.appendChild(clonedOption);
 
-            // Remove the selected option from select2
-            select2.removeChild(selectedOption);
-        }
-    }
+		// Check if any of the required fields is empty
+		if (!name || !phone || !email || !startDate) {
+			alert('Please fill in all required fields.');
+			return;
+		}
 
-    // Add event listeners to both select elements
-    select1.addEventListener("dblclick", transferOptionsFromSelect1ToSelect2);
-    select2.addEventListener("dblclick", transferOptionsFromSelect2ToSelect1);
-</script> -->
+		var userFormData = {
+			"Name": name,
+			"Phone": phone,
+			"Email": email,
+			"course_id": {{course.pk}},
+			'startDate': startDate,
+			'shift': shift
+		};
 
-	<script>
-		// Get a reference to the submit button
-		const submitButton = document.getElementById('submitButton');
+		var url = '/courses/' + '{{course.pk}}' + '/submit_form';
 
-		// Add a click event listener to the submit button
-		submitButton.addEventListener('click', function(event) {
-			event.preventDefault(); // Prevent the form from submitting
+		fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": 'application/json',
+				'X-CSRFToken': csrftoken,
+			},
+			body: JSON.stringify({ 'form': userFormData })
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				const dataString = JSON.stringify(data);
+				console.log(dataString["message"]);
+				alert(dataString);
 
-			// Get the values of the input fields
-			const name = document.getElementById('name').value;
-			const phone = document.getElementById('phone').value;
-			const email = document.getElementById('email').value;
-			const startDate = document.getElementById('datepicker').value;
+				// You can redirect or perform additional actions after a successful submission
+			});
+	});
 
-			// Check if any of the required fields is empty
-			if (!name || !phone || !email || !startDate) {
-				alert('Please fill in all required fields.');
-				return;
-			}
+</script>
 
-			var userFormData = {
-				"Name": name,
-				"Phone": phone,
-				"Email": email,
-				"course_id": {{course.pk}},
-				'startDate': startDate
-			};
-
-			var url = '/courses/' + '{{course.pk}}' + '/submit_form';
-
-			fetch(url, {
-				method: "POST",
-				headers: {
-					"Content-Type": 'application/json',
-					'X-CSRFToken': csrftoken,
-				},
-				body: JSON.stringify({ 'form': userFormData })
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					const dataString = JSON.stringify(data);
-					console.log(dataString["message"]);
-					alert(dataString);
-
-					// You can redirect or perform additional actions after a successful submission
-				});
-		});
-
-	</script>
 
 <script>
     function enableDatepicker() {

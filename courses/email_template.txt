@@ -9,7 +9,7 @@ Dear <strong>{name}</strong>,
     </div>
 
     <p class="session-details">
-        We're confirming your registration for our upcoming introductory session, which will be held on <strong> {date} </strong>. This session is your opportunity to meet your instructor, [Instructor Name], learn more about our unique approach to English teaching, and ask any questions you may have.
+        We're confirming your registration for our upcoming introductory session, which will be held on <strong> {date} </strong>. This session is your opportunity to meet your instructor,  <strong> {Instructor_Name} </strong>, learn more about our unique approach to English teaching, and ask any questions you may have.
     </p>
 
     <ul class="session-details">

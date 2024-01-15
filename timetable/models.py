@@ -4,10 +4,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 # Create your models here.
 
-from datetime import datetime, timedelta
 
-import pandas 
-import datetime
+from datetime import datetime, timedelta
 
 
 from django.db import models
@@ -55,6 +53,13 @@ class Classes(models.Model):
 
                         period_end_time = start_time + timedelta(hours=i + 1)
 
+                        is_night_shift = period_start_time.hour >= 18
+
+
+
+
+
+
                         period_week_number = period_start_time.isocalendar()[1]
 
                         day_name = a 
@@ -65,11 +70,14 @@ class Classes(models.Model):
                             name=period_name,
                             start_at=period_start_time,
                             end_at=period_end_time,
-                            day = day_name
+                            day = day_name, 
 
                         )
-                        
+
+                        period.ShiftChoices = 'Night' if is_night_shift else 'Morning'
+ 
                         period.save()
+                        
             self.numOfweek = period_week_number
             self.save()
 
@@ -88,9 +96,25 @@ class periods(models.Model):
     )
 
     day = models.CharField(max_length=10, choices=DAY_CHOICES,null=True)
+
     name = models.CharField(max_length=100,null=True)
+
     start_at = models.TimeField(null=True)
+
     end_at = models.TimeField(null=True, blank=True)
+
+    
+    
+    shifts =  [
+       ("Morning", "Morning"),
+        ("Night", "Nght"),
+        ('Any','Any')
+    ]
+
+    ShiftChoices = models.CharField(max_length=100,choices=shifts ,default='Any',null=True)
+
+
+
 
     def __str__(self):
         return f"{self.day} {self.start_at}"

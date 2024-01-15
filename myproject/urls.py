@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from django_summernote import urls as summernote_urls
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('summernote/', include(summernote_urls)),  # Include django-summernote URLs here
     path('index',include('index.url')),
     path('',include('index.url')),
     path('courses',include('courses.url')),

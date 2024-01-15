@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_summernote',
+    'ckeditor'
 ]
 
 MIDDLEWARE = [
@@ -97,7 +99,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'learning',
+        'NAME': 'leaning',
         'USER': 'root',
         'PASSWORD':'38369342',
         'HOST':'127.0.0.1',
