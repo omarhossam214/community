@@ -3,18 +3,22 @@ from .models import Course
 from timetable.models import periods
 import json
 from active.models import ActiveCourse
+
 # Create your views here.
 
 from django.http import JsonResponse
 from team.models import instructor
 from active.models import pupl
 
-from django.core.mail import send_mail
 from django.conf import settings
 
 import time
+import dramatiq
 
-
+from django.db import models
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from background_task import background
 
 
 def index(request):
@@ -35,6 +39,12 @@ def coursedetails(request, pk):
 
 
 
+
+
+
+
+
+
 def submit_form(request, pk):
     # Record the start time
     start_time = time.time()
@@ -45,36 +55,8 @@ def submit_form(request, pk):
     # Parse JSON data from the request body
     data = json.loads(request.body)
 
-    # Extract data from the JSON payload
-    name = data['form']['Name']
-    phone = data['form']['Phone']
-    email = data['form']['Email']
-    start_date = data['form']['startDate']
-    shift = data['form']['shift']
 
-    # Get an instructor with the least number of active courses
-    instructor_id_with_less_count = instructor.get_instructor_with_less_count()
-
-    # Get or create an ActiveCourse instance for the given course and instructor
-    activecourse, created_1 = ActiveCourse.objects.get_or_create(
-        course=course,
-        teacher=instructor_id_with_less_count,
-        start_date = start_date,
-    )
-
-    # Get or create an ActiveStudent instance for the given activecourse, phone, name, and email
-    activestudent, created_2 = pupl.objects.get_or_create(
-        active=activecourse,
-        phone=phone,
-        name=name,
-        email=email,
-    )
-
-    # If a new ActiveStudent instance is created, update the enrolled count in ActiveCourse
-    if created_2:
-        activecourse.enrolled = activecourse.enrolled + 1
-        activecourse.save()
-
+    assign_pupl_teacher(data=data,course=course)
 
     # Record the end time
     end_time = time.time()
@@ -82,11 +64,39 @@ def submit_form(request, pk):
     # Calculate and print the runtime
     runtime = end_time - start_time
     print(f"Runtime: {runtime} seconds")
-    print(shift)
 
 
     # Return the JsonResponse or other response as needed
     return JsonResponse({'message': 'The student is already enrolled'})
-   
 
 
+def assign_pupl_teacher(data,course):
+
+    # Extract data from the JSON payload
+    name = data['form']['Name']
+    phone = data['form']['Phone']
+    email = data['form']['Email']
+    start_date = data['form']['startDate']
+    shift = data['form']['shift']
+
+    # Convert the course dictionary back to a Course object
+
+    # Rest of your code remains the same
+    instructor_id_with_less_count = instructor.get_instructor_with_less_count()
+    
+    activecourse, created_1 = ActiveCourse.objects.get_or_create(
+        course=course,
+        teacher=instructor_id_with_less_count,
+        start_date=start_date,
+    )
+
+    activestudent, created_2 = pupl.objects.get_or_create(
+        active=activecourse,
+        phone=phone,
+        name=name,
+        email=email,
+    )
+
+    if created_2:
+        activecourse.enrolled = activecourse.enrolled + 1
+        activecourse.save()

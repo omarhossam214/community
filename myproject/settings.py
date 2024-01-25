@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_summernote',
-    'ckeditor'
+    'ckeditor',
+    'dramatiq',
+    'background_task',
+
 ]
 
 MIDDLEWARE = [
@@ -178,10 +181,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 #RQ FOR SENING EMAIL
 
-RQ_QUEUES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-    },
-}
+
+# Dramatiq settings
+DRAMATIQ_BROKER = 'dramatiq.brokers.redis:RedisBroker'
+BROKER_URL = 'redis://localhost:6379/0'

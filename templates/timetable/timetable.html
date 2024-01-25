@@ -5,18 +5,20 @@
 
 {% block sidebar %}
 
+
+
 <style>
     body {
         margin-top: 20px;
     }
 
     .schedule-table table thead tr {
-        background: #172b33;
+        background: #000508;
     }
 
     .schedule-table table thead th {
         padding: 25px 50px;
-        color: #fff;
+        color: #040000;
         text-align: center;
         font-size: 20px;
         font-weight: 800;
@@ -28,7 +30,7 @@
         content: "";
         width: 3px;
         height: 35px;
-        background: rgba(27, 6, 6, 0.2);
+        background: rgba(255, 255, 255, 0.2);
         position: absolute;
         right: -1px;
         top: 50%;
@@ -118,7 +120,7 @@
         height: 120%;
         transform: translate(-50%, -50%) scale(0.8);
         z-index: 99;
-        background: #244452;
+        background: #86d4f5;
         border-radius: 0.25rem;
         padding: 25px 0;
         visibility: hidden;
@@ -134,7 +136,7 @@
 
     .schedule-table table tbody td.day:hover {
         background: #86d4f5;
-        color: #9e4848;
+        color: #fff;
         border: 1px solid #86d4f5;
     }
 
@@ -228,6 +230,8 @@
 
 
 
+
+
 <div class="container">
     <div class="w-95 w-md-75 w-lg-60 w-xl-55 mx-auto mb-6 text-center">
         <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
@@ -237,31 +241,30 @@
     <div class="row">
         <div class="col-md-12">
             <div class="schedule-table">
-
-                {% for active_course_instance in test %}
                 <table class="table bg-white">
                     <thead>
                         <tr>
-                            <th style="color: #9e4848;">Routineee</th>
-                                {% for day in active_course_instance.unique_days_and_start_at.unique_start_at %}
-                            <th style="color: #9e4848;">{{ day }}</th>
-                                {%endfor%}
+                            <th>Routine</th>
+                            {%for time in active_times%}
+                            <th>{{time.start_at}}</th>
+                            {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
-                        {%for days in active_course_instance.unique_days_and_start_at.unique_days %}
+                        {%for day in active_days%}
+
                         <tr>
-                            <td class="day">{{days}}</td>
+                            <td class="day">{{day.day}}</td>
                             <td class="active">
-                            <h4></h4>
-                            <p>10 am - 11 am</p>
-                            <div class="hover">
-                                <h4> Weight Loss</h4>
-                                <p> 10 am - 11 am</p>
-                                <span>Wayne Ponce</span>
-                            </div>
-                            <td></td>
+                                <h4>Weight Loss</h4>
+                                <p>10 am - 11 am</p>
+                                <div class="hover">
+                                    <h4>Weight Loss</h4>
+                                    <p>10 am - 11 am</p>
+                                    <span>Wayne Ponce</span>
+                                </div>
                             </td>
+                            <td></td>
                             <td class="active">
                                 <h4>Yoga</h4>
                                 <p>03 pm - 04 pm</p>
@@ -280,41 +283,37 @@
                                     <span>Charles King</span>
                                 </div>
                             </td>
+
                             <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
                         </tr>
-                        {%endfor%}
+                        
+                        {% endfor %}
                     </tbody>
                 </table>
-                {%endfor%}
             </div>
         </div>
     </div>
-</div>
-
-
-<div>
-<!-- {%for i in test%}
-{%for a in i.all_periods_list%}
-<a>{{a.period.day}}</a>
-{%endfor%}
-{%endfor%} -->
-{% for active_course_instance in test %}
-    <h3>Unique Days and Start At Times for Active Course {{ active_course_instance.id }}</h3>
-    <ul>
-        {% for day in active_course_instance.unique_days_and_start_at.unique_days %}
-        {%for i in active_course_instance.all_periods_list%}
-            <li>Day: {{ day }} .. {{i}} </li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
-    <ul>
-        {% for start_at in active_course_instance.unique_days_and_start_at.unique_start_at %}
-            <li>Start At: {{ start_at }}</li>
-        {% endfor %}
-    </ul>
-{% endfor %}
-
-
 </div>
 
 

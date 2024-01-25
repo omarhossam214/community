@@ -178,12 +178,6 @@ class ActiveCourse(models.Model):
         except:
             return 0
         
-
-    @job
-    def notify_teacher_indication(self):
-        
-        return
-
     
 
 class pupl(models.Model):
@@ -210,7 +204,6 @@ class pupl(models.Model):
  
 
 
-    @job
     def send_email_background(self):
         
         base_directory = settings.BASE_DIR
@@ -258,14 +251,12 @@ class ActiveCoursePeriod(models.Model):
 
     period = models.ForeignKey(periods, on_delete=models.CASCADE)
 
-    #additional_field = models.CharField(max_length=100)  # Add your additional fields here
-
     teacher = models.ForeignKey(instructor, on_delete=models.CASCADE,blank=True, null=True)
 
     content = RichTextField(null=True, blank=True)
 
     class Meta:
-        unique_together = ('active_course', 'period')
+        unique_together = ('teacher', 'period')
 
 
 
