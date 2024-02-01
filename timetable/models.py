@@ -81,6 +81,11 @@ class Classes(models.Model):
             self.numOfweek = period_week_number
             self.save()
 
+
+
+
+     
+
 class periods(models.Model):
 
     Classes = models.ForeignKey(Classes, on_delete=models.CASCADE, related_name='Classes',null=True)
@@ -140,4 +145,6 @@ class periods(models.Model):
     
     def class_time(self):
         return f'{self.start_at} - {self.end_at}'
+    
+ 
     

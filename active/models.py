@@ -15,6 +15,8 @@ from django.db import models
 from django_rq import job
 
 
+import datetime
+
 
 #
 from django.db.models import Count
@@ -76,11 +78,94 @@ class instructor(models.Model):
     def __str__(self):
         return self.name
 
+        
+    @property
+    def get_unique_dates(self):
+        """
+        Get unique dates associated with the periods of the instructor.
+        """
+        unique_dates_set = set()
+
+        uniquePeriod = periods.objects.all()
+
+        unique_dates_list = []
+        for period in uniquePeriod:
+            if period.start_at not in unique_dates_list:
+                unique_dates_list.append(period.start_at)
+            else :
+                pass
+
+
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+        return {
+            'unique_dates': unique_dates_list,
+            'unique_days': days,
+        }
+  
     
+    @property
+    def get_active_course(self):
+
+        activeCourse = ActiveCourse.objects.filter(teacher=self)
 
 
+        return {
+            'activeCourse':activeCourse
+        }
+    
+    @property
+    def get_active_course_period(self):
+        periods_object = []
+
+        periods_list = periods.objects.all()
+
+        for period in periods_list:
+            periods_object.append({
+                'day': period.day,
+                'start_at': period.start_at,
+                'end_at': period.end_at,
+                'course_id': None
+            })
+
+        active_periods_object = []
+
+        activeCourse = ActiveCourse.objects.filter(teacher=self)
+
+        # List to track unique periods while preserving order
+        unique_periods_list = []
+
+        for course in activeCourse:
+            for activePeriod in course.periods.all():
+                current_period = {
+                    'day': activePeriod.day,
+                    'start_at': activePeriod.start_at,
+                    'end_at': activePeriod.end_at,
+                    'course_id': course.course_class_id
+                }
+
+                # Check if the period is already in the list (a duplicate)
+                if current_period not in unique_periods_list:
+                    # Add the current period to the list and active_periods_object
+                    unique_periods_list.append(current_period)
+                    active_periods_object.append(current_period)
+
+        # Update the course_id in periods_object based on active_periods_object
+        for period_info in periods_object:
+            for active_period in active_periods_object:
+                # Check equality based on relevant fields
+                if (
+                    period_info['day'] == active_period['day'] and
+                    period_info['start_at'] == active_period['start_at'] and
+                    period_info['end_at'] == active_period['end_at']
+                ):
+                    period_info['course_id'] = active_period['course_id']
+
+        return periods_object
 
 
+    
+    
 
 class ActiveCourse(models.Model):
 
