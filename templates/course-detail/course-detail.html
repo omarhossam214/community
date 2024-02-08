@@ -663,7 +663,7 @@ enrollButton.addEventListener("click", function (e) {
 			.then((data) => {
 				const dataString = JSON.stringify(data);
 				console.log(dataString["message"]);
-				alert(dataString);
+				window.location.href = '/exam';
 
 				// You can redirect or perform additional actions after a successful submission
 			});

@@ -1,0 +1,232 @@
+{%extends 'base/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+
+
+
+
+<script type="text/javascript">
+    var user = '{{request.user}}';
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+</script>
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible"
+		content="IE=edge">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+
+	<style>
+		/* Styling the Body element 
+		i.e. Color, Font, Alignment */
+		body {
+			background-color: #80abe7;
+			font-family: Verdana;
+			text-align: center;
+		}
+
+		/* Styling the Form (Color, Padding, Shadow) */
+		form {
+			background-color: #fff;
+			max-width: 500px;
+			margin: 50px auto;
+			padding: 30px 20px;
+			box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+		}
+
+		/* Styling form-control Class */
+		.form-control {
+			text-align: left;
+			margin-bottom: 25px;
+		}
+
+		/* Styling form-control Label */
+		.form-control label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		/* Styling form-control input, 
+		select, textarea */
+		.form-control input,
+		.form-control select,
+		.form-control textarea {
+			border: 1px solid #777;
+			border-radius: 2px;
+			font-family: inherit;
+			padding: 10px;
+			display: block;
+			width: 95%;
+		}
+
+		/* Styling form-control Radio 
+		button and Checkbox */
+		.form-control input[type="radio"],
+		.form-control input[type="checkbox"] {
+			display: inline-block;
+			width: auto;
+		}
+
+		/* Styling Button */
+		button {
+			background-color: #ffffff;
+			border: 1px solid #000000;
+			border-radius: 2px;
+			font-family: inherit;
+			font-size: 21px;
+			display: block;
+			width: 100%;
+			margin-top: 50px;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	
+	<br><br><br><br>
+
+	<!-- Create Form -->
+	<form >
+
+		<!-- Details -->
+		<div class="form-control">
+			<label for="name" id="label-name">
+				Name
+			</label>
+
+			<!-- Input Type Text -->
+			<input type="text" id="name"
+				placeholder="Enter your name" value="{{name}}"  disabled/> 
+		</div>
+
+		<div class="form-control">
+			<label for="email" id="label-email">
+				Email
+			</label>
+
+			<!-- Input Type Email-->
+			<input type="email" id="email"
+				placeholder="Enter your email" value="{{email}}"  disabled/>
+		</div>
+
+		{% for question in questions %}
+		<div class="form-control">
+			<label>
+				{{ question.question_text | safe }}
+			</label>
+	
+			<!-- Input Type Radio Button -->
+			{% for answer in question.fetch_related_answers %}
+				<label for="{{ answer.pk }}">
+					<input type="radio" id="{{ answer.pk }}" name="question_{{ question.pk }}"> {{ answer.answer_text }}
+				</label>
+			{% endfor %}
+		</div>
+		{% endfor %}
+
+		<!-- Multi-line Text Input Control -->
+		<button type="button" onclick="submitForm()">
+			Submit
+		</button>
+	</form>
+</body>
+
+<script>
+    function submitForm() {
+        var formData = {
+            'name': document.getElementById('name').value,
+            'email': document.getElementById('email').value,
+            'answers': []
+        };
+
+        // Get selected answers
+        var radioButtons = document.querySelectorAll('input[type="radio"]:checked');
+        radioButtons.forEach(function (radio) {
+            formData['answers'].push({
+                'question_id': radio.getAttribute('name').split('_')[1], // Extract question id
+                'answer_id': radio.getAttribute('id')
+            });
+        });
+
+        var url = '/exam/' + 'get_student_answers'; // Corrected the variable declaration
+		console.log(formData)
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'form': formData }) // Corrected the variable name
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Form data submitted:', data);
+            // You can add any additional logic here after a successful submission
+        })
+    }
+</script>
+
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Revolution Slider -->
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.carousel.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+<script src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js"></script>
+<script src="{% static 'plugins/revolution/js/main-slider-script.js' %}"></script>
+<!-- For Js Library -->
+
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/appear.js' %}"></script>
+<script src="{% static 'js/parallax.min.js' %}"></script>
+<script src="{% static 'js/tilt.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.paroller.min.js' %}"></script>
+<script src="{% static 'js/owl.js' %}"></script>
+<script src="{% static 'js/wow.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+<script src="{% static 'js/nav-tool.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+
+
+
+{% endblock content %}
+
+</body>
+</html>

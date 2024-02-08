@@ -272,10 +272,23 @@
                                 {%endfor%}
 
                             </tr>
+
                         
                         {% endfor %}
                     </tbody>
                 </table>
+                {%for courses in i.get_active_course.activeCourse%}
+                <div>
+                   <h2><a href = 'admin/active/activecourse/{{courses.pk}}/change/'> {{courses.course_class_id}} </a></h2> 
+                   <a>{{courses.course}} </a>
+
+                </div>
+                {%endfor%}
+
+
+
+
+
             </div>
         </div>
     </div>

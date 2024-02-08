@@ -6,7 +6,7 @@ from active.models import ActiveCourse
 
 # Create your views here.
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from team.models import instructor
 from active.models import pupl
 
@@ -42,32 +42,34 @@ def coursedetails(request, pk):
 
 
 
-
-
-
 def submit_form(request, pk):
-    # Record the start time
     start_time = time.time()
 
-    # Retrieve the Course object based on the provided primary key (pk)
-    course = get_object_or_404(Course, pk=pk)
-
-    # Parse JSON data from the request body
     data = json.loads(request.body)
 
+    print(data)
 
-    assign_pupl_teacher(data=data,course=course)
+    response = JsonResponse({'message': 'The student is already enrolled'})
+    assign_pupl_teacher_cookie(data=data,response=response)
+    # Set cookie in the response
+    response.set_cookie('formData', json.dumps(data))
 
-    # Record the end time
     end_time = time.time()
-
-    # Calculate and print the runtime
     runtime = end_time - start_time
     print(f"Runtime: {runtime} seconds")
 
+    return response
 
-    # Return the JsonResponse or other response as needed
-    return JsonResponse({'message': 'The student is already enrolled'})
+
+
+def assign_pupl_teacher_cookie(data,response):
+
+    
+    response.set_cookie('formData', json.dumps(data))
+
+    return response
+
+
 
 
 def assign_pupl_teacher(data,course):

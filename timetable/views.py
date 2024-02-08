@@ -121,10 +121,6 @@ def index(request):
     # Retrieve all instances of the instructor model
     instructors = instructor.objects.all()
 
-    for i in instructors:
-        print(i.get_active_course_period)
-
-
 
     return render(request, 'timetable/timetable.html', {'instructors': instructors})
 

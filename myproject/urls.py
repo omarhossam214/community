@@ -30,5 +30,6 @@ urlpatterns = [
     path('timetable',include('timetable.url')),
     path('team',include('team.url')),
     path('form',include('form.url')),
-    path('course-detail',include('courseDetail.url'))
+    path('course-detail',include('courseDetail.url')),
+    path('exam',include('exam.url'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
