@@ -1,0 +1,59 @@
+
+
+<body>
+	
+	<br><br><br><br>
+
+	<!-- Create Form -->
+	<form >
+
+
+		<!-- Details -->
+		<div class="form-control">
+			<label for="name" id="label-name">
+				Name
+			</label>
+
+			<!-- Input Type Text -->
+			<input type="text" id="name"
+				placeholder="Enter your name" value="{{name}}"  disabled/> 
+		</div>
+
+		<div class="form-control">
+			<label for="email" id="label-email">
+				Emailsssssssssssssssssssssssssssssss
+			</label>
+
+			<!-- Input Type Email-->
+			<input type="email" id="email"
+				placeholder="Enter your email" value="{{email}}"  disabled/>
+		</div>
+
+		<div id="questions" >
+		{% for question in pupil_reaction.exam_result %}
+		<div class="form-control">
+			<label>
+				{{ question.questions | safe }}
+			</label>
+	
+			<!-- Input Type Radio Button -->
+			{% for answer in question.answers %}
+				<label for="{{ answer.pk }}">
+					<input type="radio"> {{ answer }}
+				</label>
+			{% endfor %}
+		</div>
+		{% endfor %}
+		</div>
+
+		<!-- Multi-line Text Input Control -->
+		<button type="button" onclick="submitForm()" id="submit" style="display: block;">
+			Submit
+		</button>
+
+		<div class="success-msg" id="success-msg" style="display: none;">
+			<i class="fa fa-check"></i>
+			You have finished the exam! Check your email inbox , or Spam for the result and induction date.
+		</div>
+	</form>
+</body>

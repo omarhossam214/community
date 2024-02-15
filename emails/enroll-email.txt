@@ -1,0 +1,43 @@
+
+Dear <strong>{name}</strong>,
+
+<html>
+<body>
+
+    <div class="welcome-message">
+        Welcome to the Community! We're excited to have you join us and help you achieve your English language learning goals.
+    </div>
+
+    <p class="session-details">
+        We're confirming your registration for our upcoming introductory session, which will be held on <strong> {date} </strong>. This session is your opportunity to meet your instructor,  <strong> {Instructor_Name} </strong>, learn more about our unique approach to English teaching, and ask any questions you may have.
+    </p>
+
+    <ul class="session-details">
+        <li>Discover your current English level</li>
+        <li>Learn about our course curriculum and methodology</li>
+        <li>Get a sneak peek at the interactive activities and resources</li>
+        <li>Have the opportunity to ask questions and chat with your instructor</li>
+    </ul>
+
+    <div class="resources">
+        <p>To ensure you're prepared for the session, we recommend reviewing the following resources:</p>
+        <ul>
+            <li>Our website: <a href="http://127.0.0.1:8000/">here</a></li>
+            <li>Frequently Asked Questions: <a href="http://127.0.0.1:8000/FAQ">here</a></li>
+            <li>Student Testimonials: <a href="http://127.0.0.1:8000/courses/2/">here</a></li>
+
+        </ul>
+    </div>
+
+    <p class="signature">
+        We're confident that you'll find our English learning program to be valuable and rewarding. We look forward to meeting you soon!
+        <br>
+        For any further inquiries, please feel free to contact us at <strong> +201156987036 </strong>.
+
+        <br><br>
+        Sincerely,<br>
+        The Community Team
+    </p>
+
+</body>
+</html>

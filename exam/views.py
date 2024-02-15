@@ -40,29 +40,25 @@ def index(request):
 
 
 def get_student_answers(request):
-    response = HttpResponse()
 
-    print(2323232323)
 
     data = json.loads(request.body)
 
 
     formData_cookie = request.COOKIES.get('formData')
-
     formData = json.loads(formData_cookie)
 
     assign_pupl_teacher(data=formData,exam_result=data)
 
+   # Clear the formData cookie
+    response = HttpResponse()
+    expiration_date = datetime(1970, 1, 1)
+    response.set_cookie('formData', value='', expires=expiration_date, httponly=True)
 
-    # # # after submiiting the data delete the cookie in order to resubmit again   
-    # response = HttpResponse()
-    # expiration_date = datetime(1970, 1, 1)
-    # response.set_cookie('formData', value='', expires=expiration_date, httponly=True)
+    print('DONE')
 
     
-
-    
-    return JsonResponse({'message': 'The student is already enrolled'})
+    return response
 
 
 
@@ -80,6 +76,8 @@ def assign_pupl_teacher(data,exam_result):
 
     course = get_object_or_404(Course, pk=course)
     # Convert the course dictionary back to a Course object
+
+
 
     # Rest of your code remains the same
     instructor_id_with_less_count = instructor.get_instructor_with_less_count()
@@ -112,11 +110,9 @@ def assign_pupl_teacher(data,exam_result):
 
 
 
-        print(exam_result['form']['answers'])
-        answers = exam_result['form']['answers'] #[{'question_id': '3', 'answer_id': '8'}, {'question_id': '2', 'answer_id': '5'}, {'question_id': '5', 'answer_id': '14'}]
+        answers = exam_result['form']['answers'] 
         for answer in answers:
 
-            print(666666666666666666666666666666666666666666)
 
             question_id = answer['question_id']
             answer_id = answer['answer_id']
@@ -132,11 +128,6 @@ def assign_pupl_teacher(data,exam_result):
                 exam=activeexam,
             )
 
-        # activeexam, created_1 = ActiveCourse.objects.get_or_create(
-        #     exam_name=course,
-        #     pupil=activestudent,
-        #     start_date=start_date,
-        # )
 
 
-    return 'submitted'
+    return JsonResponse({'data': {'message': 'Done'}})

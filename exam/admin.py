@@ -21,9 +21,19 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 
+
+class PupilReactionInline(admin.TabularInline):  # or admin.StackedInline
+    model = PupilReaction
+    extra = 1  # Number of forms to show for PupilReaction
+
+class ExamAdmin(admin.ModelAdmin):
+    inlines = [PupilReactionInline]
+
+
+
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(Answer)
 
-admin.site.register(Exam)
+admin.site.register(Exam,ExamAdmin)
 admin.site.register(PupilReaction)
 

@@ -1,0 +1,60 @@
+
+
+<body>
+	
+	<br><br><br><br>
+
+	<!-- Create Form -->
+	<form >
+
+		<!-- Details -->
+		<div class="form-control">
+			<label for="name" id="label-name">
+				Name : {{name}}
+			</label>
+
+			<!-- Input Type Text -->
+			<input type="text" id="name"
+				placeholder="Enter your name" value="{{name}}" /> 
+		</div>
+
+		<div class="form-control">
+			<label for="email" id="label-email">
+				Email
+			</label>
+
+			<!-- Input Type Email-->
+			<input type="email" id="email"
+				placeholder="Enter your email" value="{{email}}" />
+		</div>
+
+		<br><br>
+
+		<div id="questions">
+			{% for question_data in exam_result.questions %}
+			<div class="form-control">
+				<label>
+					Question {{ forloop.counter }}: {{ question_data.question_text | safe }}
+				</label>
+				<hr> <!-- Add a horizontal line here -->
+		
+				<!-- Input Type Checkbox with Checkmark or X -->
+				{% for answer in question_data.answers %}
+					<label>
+						<input type="checkbox" {% if answer.correct %}checked{% endif %} disabled>
+						{% if answer.correct %} √ {% else %} X {% endif %} - {{ answer.text }}
+					</label>
+				{% endfor %}
+				<br>
+				<label>
+					<strong>Selected answer: {{ question_data.selected_answer }}</strong>
+				</label>
+			</div>
+			<br><br>
+			{% endfor %}
+		</div>
+		
+		
+	</form>
+</body>
+

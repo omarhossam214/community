@@ -101,6 +101,48 @@
 			margin-top: 50px;
 			margin-bottom: 20px;
 		}
+
+		#loading-bar-spinner.spinner {
+			left: 50%;
+			top: 50%;
+			position: fixed; /* Change from 'absolute' to 'fixed' */
+			transform: translate(-50%, -50%); /* Center the spinner */
+			z-index: 9999 !important; /* Increase z-index */
+			animation: loading-bar-spinner 800ms linear infinite; /* Adjust animation duration */
+		}
+		
+		#loading-bar-spinner.spinner .spinner-icon {
+			width: 80px; /* Adjust the width */
+			height: 80px; /* Adjust the height */
+			border: solid 6px transparent;
+			border-top-color: #00C8B1 !important;
+			border-left-color: #00C8B1 !important;
+			border-radius: 50%;
+		}
+		
+		@keyframes loading-bar-spinner {
+			0%   { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		
+
+		@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+		.success-msg {
+			margin: 10px 0;
+			padding: 20px; /* Increase padding for a bigger message */
+			border-radius: 3px;
+			color: #270;
+			background-color: #DFF2BF;
+			font-family: 'Arial', sans-serif; /* Change font family */
+			font-size: 18px; /* Adjust font size */
+		}
+		
+		.success-msg i {
+			font-size: 24px; /* Adjust icon size if necessary */
+			margin-right: 10px; /* Add some spacing between the icon and text */
+		}
+
+		
 	</style>
 </head>
 
@@ -110,6 +152,8 @@
 
 	<!-- Create Form -->
 	<form >
+
+		<div id="loading-bar-spinner" class="spinner" style="display: none;"><div class="spinner-icon"></div></div>
 
 		<!-- Details -->
 		<div class="form-control">
@@ -132,6 +176,7 @@
 				placeholder="Enter your email" value="{{email}}"  disabled/>
 		</div>
 
+		<div id="questions" style="display: block;" >
 		{% for question in questions %}
 		<div class="form-control">
 			<label>
@@ -146,16 +191,24 @@
 			{% endfor %}
 		</div>
 		{% endfor %}
+		</div>
 
 		<!-- Multi-line Text Input Control -->
-		<button type="button" onclick="submitForm()">
+		<button type="button" onclick="submitForm()" id="submit" style="display: block;">
 			Submit
 		</button>
+
+		<div class="success-msg" id="success-msg" style="display: none;">
+			<i class="fa fa-check"></i>
+			You have finished the exam! Check your email inbox , or Spam for the result and induction date.
+		</div>
 	</form>
 </body>
 
 <script>
     function submitForm() {
+		document.getElementById('loading-bar-spinner').style.display = 'block';
+
         var formData = {
             'name': document.getElementById('name').value,
             'email': document.getElementById('email').value,
@@ -181,10 +234,12 @@
             },
             body: JSON.stringify({ 'form': formData }) // Corrected the variable name
         })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Form data submitted:', data);
+        .then(() => {
             // You can add any additional logic here after a successful submission
+			document.getElementById('loading-bar-spinner').style.display = 'none';
+			document.getElementById('questions').style.display = 'none';
+			document.getElementById('submit').style.display = 'none';
+			document.getElementById('success-msg').style.display = 'block';
         })
     }
 </script>

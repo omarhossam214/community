@@ -66,7 +66,7 @@ class instructor(models.Model):
         if instructors_with_counts.exists():
             return instructors_with_counts.first()
 
-        return 'we got nothing to show'
+        return 'No instructor in the database Yet, register instructor in order to assign them'
     
     def save(self, *args, **kwargs):
 
