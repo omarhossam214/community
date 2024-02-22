@@ -121,6 +121,8 @@ def index(request):
     # Retrieve all instances of the instructor model
     instructors = instructor.objects.all()
 
+    print(instructor)
+
 
     return render(request, 'timetable/timetable.html', {'instructors': instructors})
 

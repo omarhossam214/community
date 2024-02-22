@@ -8,13 +8,25 @@ from active.models import pupl
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 import io
-from django.core.files.base import ContentFile
+
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+
+
+from django.conf import settings
+from django.core.mail import send_mail
+import os
+
+
+
 
 class Exam(models.Model):
 
     exam_name = models.CharField(max_length=100,null=True)
 
-    pupil = models.ForeignKey(pupl  , on_delete=models.CASCADE,null=True)
+    pupil = models.ForeignKey(pupl,on_delete=models.CASCADE,null=True)
 
     start_date = models.DateTimeField(null=True)
 
@@ -33,6 +45,7 @@ class Exam(models.Model):
         
     @property
     def exam_result(self):
+
         pupil_reactions = PupilReaction.objects.filter(exam=self)
 
         result = {'questions': [],
@@ -58,14 +71,16 @@ class Exam(models.Model):
         # Get related PupilReaction for this exam
         exam_result  = self.exam_result
 
-        name = self.exam_name
+        name = str(self.exam_name)
 
-        print(exam_result)
+        email = self.pupil.email
+
 
         # Simple HTML content for testing
         html_content = render_to_string('pdf_template.html', {
             'exam_result': exam_result,
-            'name':name
+            'name':name,
+            'email':email
         })
 
       
@@ -78,24 +93,51 @@ class Exam(models.Model):
 
 
         return pdf_content.read()        # Get related PupilReaction for this exam
+    
 
-        
+
+    
+
+
+    def send_exam_result_email(self):
+        base_directory = settings.BASE_DIR
+
+        template_path = os.path.join(base_directory, 'emails', 'test-result.txt')
+
+        with open(template_path, 'r') as file:
+            email_content = file.read()
+
+        # Adjust the email content to include the exam file and degree
+        email_content = email_content.format(
+            course=self.exam_name,
+            name=self.pupil.name,
+            date=self.start_date,
+            exam_file=self.exam_file.url,
+            degree=self.degree,
+        )
+
+
+        send_mail(
+            "Exam Result Notification",
+            email_content,
+            settings.EMAIL_HOST_USER,
+            [f'{self.pupil.email}'],
+            fail_silently=False,
+            html_message=email_content,
+        )
+
+
+
 
     def save(self, *args, **kwargs):
         """
-        Override the save method to update the degree.
+        Override the save method to update the degre
         """
-        self.degree = self.total_degree
+        if self.total_degree is not None:
+            self.degree = self.total_degree
 
-        if not self.exam_file:
-            # Create PupilReaction PDF and save it as exam_file only if it's not already set
-            pdf_content = self.create_pupil_reaction_pdf()
-            self.exam_file.save(f"{self.exam_name}_pupil_reaction.pdf", ContentFile(pdf_content), save=True)
 
         super().save(*args, **kwargs)
-
-
-        # Update exam_file without triggering the save method
 
 
 

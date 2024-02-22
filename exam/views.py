@@ -12,9 +12,14 @@ from django.shortcuts import get_object_or_404
 from courses.models import Course 
 from.models import Exam,PupilReaction,Answer
 # Create your views here.
+from django.core.files.base import ContentFile
 
 
 from django.http import JsonResponse, HttpResponse
+from django.conf import settings
+from django.core.mail import send_mail
+import os
+
 
 def index(request):
     # Fetch three questions randomly
@@ -77,15 +82,16 @@ def assign_pupl_teacher(data,exam_result):
     course = get_object_or_404(Course, pk=course)
     # Convert the course dictionary back to a Course object
 
+    print(shift)
 
-
-    # Rest of your code remains the same
-    instructor_id_with_less_count = instructor.get_instructor_with_less_count()
+    # Get_instructor_with_less_count_match_shifts
+    instructor_id_with_less_count = instructor.get_instructor_with_less_count_match_shifts(shift = shift)
     
     activecourse, created_1 = ActiveCourse.objects.get_or_create(
         course=course,
         teacher=instructor_id_with_less_count,
         start_date=start_date,
+        ShiftChoices=shift
     )
 
     activestudent, created_2 = pupl.objects.get_or_create(
@@ -93,6 +99,7 @@ def assign_pupl_teacher(data,exam_result):
         phone=phone,
         name=name,
         email=email,
+        ShiftChoices=shift
     )
 
     if created_2:
@@ -103,7 +110,7 @@ def assign_pupl_teacher(data,exam_result):
 
                
         activeexam, created_1 = Exam.objects.get_or_create(
-            exam_name=course,
+            exam_name=course.name, # Use the name attribute of the Course
             pupil=activestudent,
             start_date=start_date,
         )
@@ -128,6 +135,20 @@ def assign_pupl_teacher(data,exam_result):
                 exam=activeexam,
             )
 
+    if created_1:
+            # Create PupilReaction PDF and save it as exam_file only if it's not already set
+            pdf_content = activeexam.create_pupil_reaction_pdf()
+            activeexam.exam_file.save("pupil_reaction.pdf", ContentFile(pdf_content), save=True)
+
+            activeexam.save()
+
+            activeexam.send_exam_result_email()
+
+
+    #activestudent
 
 
     return JsonResponse({'data': {'message': 'Done'}})
+
+
+

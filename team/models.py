@@ -71,17 +71,7 @@ class Staff(models.Model):
     index_link.short_description = 'time table'
 
     
-    
-
-
-@receiver(post_save, sender=Staff)
-def create_user(sender, instance, created, **kwargs):
-    if created:
-        user = User.objects.create_user(username=instance.name, password=instance.password)
-        user.save()
-
-
-
+   
 
 
 

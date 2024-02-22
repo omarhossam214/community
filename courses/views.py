@@ -72,33 +72,40 @@ def assign_pupl_teacher_cookie(data,response):
 
 
 
-def assign_pupl_teacher(data,course):
+# def assign_pupl_teacher(data,course):
 
-    # Extract data from the JSON payload
-    name = data['form']['Name']
-    phone = data['form']['Phone']
-    email = data['form']['Email']
-    start_date = data['form']['startDate']
-    shift = data['form']['shift']
+#     # Extract data from the JSON payload
+#     name = data['form']['Name']
+#     phone = data['form']['Phone']
+#     email = data['form']['Email']
+#     start_date = data['form']['startDate']
+#     shift = data['form']['shift']
 
-    # Convert the course dictionary back to a Course object
 
-    # Rest of your code remains the same
-    instructor_id_with_less_count = instructor.get_instructor_with_less_count()
+#     print(shift)
+#     # Convert the course dictionary back to a Course object
+
+#     # Rest of your code remains the same
+#     instructor_id_with_less_count = instructor.get_instructor_with_less_count_match_shifts(shift = shift)
     
-    activecourse, created_1 = ActiveCourse.objects.get_or_create(
-        course=course,
-        teacher=instructor_id_with_less_count,
-        start_date=start_date,
-    )
+#     activecourse, created_1 = ActiveCourse.objects.get_or_create(
+#         course=course,
+#         teacher=instructor_id_with_less_count,
+#         start_date=start_date,
+#         ShiftChoices=shift
+#     )
 
-    activestudent, created_2 = pupl.objects.get_or_create(
-        active=activecourse,
-        phone=phone,
-        name=name,
-        email=email,
-    )
+#     if created_1:
 
-    if created_2:
-        activecourse.enrolled = activecourse.enrolled + 1
-        activecourse.save()
+#         activestudent, created_2 = pupl.objects.get_or_create(
+#             active=activecourse,
+#             phone=phone,
+#             name=name,
+#             email=email,
+#             ShiftChoices=shift
+#         )
+
+#     if created_2:
+
+#         activecourse.enrolled = activecourse.enrolled + 1
+#         activecourse.save()

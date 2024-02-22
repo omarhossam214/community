@@ -61,7 +61,23 @@ class instructor(models.Model):
 
         add the course paramater , and the shift paramater 
         """
-        instructors_with_counts = cls.objects.exclude(count__isnull=True).order_by('count')
+        instructors_with_counts = cls.objects.exclude(count__isnull=True).order_by('count', 'id')
+
+        if instructors_with_counts.exists():
+            return instructors_with_counts.first()
+
+        return 'No instructor in the database Yet, register instructor in order to assign them'
+    
+
+    
+    @classmethod
+    def get_instructor_with_less_count_match_shifts(cls, shift):
+        """
+        Get the ID of the instructor with the least count among all assigned instructors.
+
+        add the course paramater , and the shift paramater 
+        """
+        instructors_with_counts = cls.objects.exclude(count__isnull=True).filter(ShiftChoices=shift).order_by('count', 'id')
 
         if instructors_with_counts.exists():
             return instructors_with_counts.first()
@@ -81,6 +97,7 @@ class instructor(models.Model):
         
     @property
     def get_unique_dates(self):
+        
         """
         Get unique dates associated with the periods of the instructor.
         """
@@ -289,13 +306,13 @@ class pupl(models.Model):
  
 
 
-    def send_email_background(self):
+    def send_email_enrollment(self):
         
         base_directory = settings.BASE_DIR
 
 
 
-        template_path = os.path.join(base_directory, 'courses', 'email_template.txt')
+        template_path = os.path.join(base_directory, 'emails', 'enrollment.txt')
 
         with open(template_path, 'r') as file:
             email_content = file.read()
@@ -319,7 +336,7 @@ class pupl(models.Model):
 
     def save(self, *args, **kwargs):
 
-        self.send_email_background()
+        self.send_email_enrollment()
 
         super().save(*args, **kwargs)
     

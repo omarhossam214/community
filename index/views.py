@@ -4,7 +4,6 @@ from active.models import instructor
 
 
 def index(request):
-    instructor.objects.all().delete()
 
     
     return render(request,'index/index.html')

@@ -24,7 +24,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class PupilReactionInline(admin.TabularInline):  # or admin.StackedInline
     model = PupilReaction
-    extra = 1  # Number of forms to show for PupilReaction
+    extra = 0  # Number of forms to show for PupilReaction
 
 class ExamAdmin(admin.ModelAdmin):
     inlines = [PupilReactionInline]
