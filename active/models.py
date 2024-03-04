@@ -142,7 +142,9 @@ class instructor(models.Model):
                 'day': period.day,
                 'start_at': period.start_at,
                 'end_at': period.end_at,
-                'course_id': None
+                'course_id': None,
+                'activeCourseId': None  # Initialize activeCourseId to None
+
             })
 
         active_periods_object = []
@@ -158,7 +160,8 @@ class instructor(models.Model):
                     'day': activePeriod.day,
                     'start_at': activePeriod.start_at,
                     'end_at': activePeriod.end_at,
-                    'course_id': course.course_class_id
+                    'course_id': course.course_class_id,
+                    'activeCourseId':course.pk
                 }
 
                 # Check if the period is already in the list (a duplicate)
@@ -177,6 +180,8 @@ class instructor(models.Model):
                     period_info['end_at'] == active_period['end_at']
                 ):
                     period_info['course_id'] = active_period['course_id']
+                    period_info['activeCourseId'] = active_period['activeCourseId']
+
 
         return periods_object
 
@@ -370,6 +375,67 @@ class ActiveCoursePeriod(models.Model):
 
 
 
+class Attendance(models.Model):
+
+
+    student = models.ManyToManyField(pupl, through='AttendanceRecord')
+
+    active_course = models.ForeignKey(ActiveCourse, on_delete=models.CASCADE,null=True)
+
+    date = models.DateField(null=True)
+
+    class_created = models.BooleanField(null=True,default=False)
+
+    def __str__(self):
+        return f"attendance of {self.active_course.course} - {self.date} ---  ID : {self.pk}"
+ 
+    @property
+    def assign_course_classes_count(self):
+
+        if self.class_created == False:
+            count = self.active_course.course.coursedetails.chapter_count()
+
+            students = pupl.objects.filter(active=self.active_course)
+
+            # Create instances based on the count
+            for student in students:
+                for _ in range(count):
+                    # You may customize the creation logic based on your requirements
+                    AttendanceRecord.objects.create(attendance=self, student=student)  # Add appropriate values for the fields
+
+    @property
+    def get_course_classes_count(self):
+
+        count = self.active_course.course.coursedetails.chapter_count()
+
+        return count
+
+   
+
+    def save(self, *args, **kwargs):
+
+        if self.class_created == False:
+            super().save(*args, **kwargs)
+            self.assign_course_classes_count
+            self.class_created = True
+
+        super().save(*args, **kwargs)
+
+ 
 
 
     
+    
+class AttendanceRecord(models.Model):
+
+    student = models.ForeignKey(pupl, on_delete=models.CASCADE,null=True)
+
+    attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE,null=True)
+    
+    ATTENDANCE_CHOICES = [
+        ('attended', 'Attended'),
+        ('cancelled_teacher', 'Cancelled by Teacher'),
+        ('cancelled_student', 'Cancelled by Student'),
+    ]
+
+    attended = models.CharField(max_length=20, choices=ATTENDANCE_CHOICES, default='attended',null=True)

@@ -2,12 +2,15 @@ from django.urls import path
 from . import views
 
 
-app_name='schedule'
+app_name = 'attendances'
 
 
 urlpatterns=[
     path('',views.index,name='index'),
-    path('/process_schedule',views.process_schedule,name='schedule'),
+    path('/<int:pk>/', views.attendances, name='attendances'),
 ]
 
  
+
+
+

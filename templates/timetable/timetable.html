@@ -258,13 +258,15 @@
                                 {%for a in i.get_active_course_period%}
                                     {%if a.day == day and a.course_id != None%}
                                 <td class="active">
-                                    <h4>{{a.course_id}}</h4>
-                                    <p>{{a.start_at}} - {{a.end_at}}</p>
-                                    <div class="hover">
+                                    <a href=/timetable/{{a.activeCourseId}}>
                                         <h4>{{a.course_id}}</h4>
                                         <p>{{a.start_at}} - {{a.end_at}}</p>
-                                        <span>Wayne Ponce</span>
-                                    </div>
+                                        <div class="hover">
+                                            <h4>{{a.course_id}}</h4>
+                                            <p>{{a.start_at}} - {{a.end_at}}</p>
+                                            <span>Wayne Ponce</span>
+                                        </div>
+                                    </a>
                                 </td>
                                     {%elif  a.day == day and a.course_id == None %}
                                 <td></td>

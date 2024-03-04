@@ -107,6 +107,8 @@ admin.site.register(ActiveCourse, ActiveCourseAdmin)
 admin.site.register(pupl,PuplAdmin)
 admin.site.register(instructor,InstructorAdmin)
 admin.site.register(ActiveCoursePeriod)
+admin.site.register(Attendance)
+admin.site.register(AttendanceRecord)
 
 
 #kkkkkk

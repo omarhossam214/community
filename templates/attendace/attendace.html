@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+    <title>Attendance Table</title>
+</head>
+<body>
+
+<h2>Attendance Table</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            {% for class_num in classes %}
+                <th> {{ classes }}</th>
+            {% endfor %}
+
+            <!-- Add more columns for additional classes -->
+        </tr>
+    </thead>
+    <tbody>
+        {%for i in attendance_records%}
+        <tr>
+            <td>{{i.student.name}}</td>
+            <td>Present</td>
+            <td>Absent</td>
+            <td>Present</td>
+            <!-- Add more columns for additional classes -->
+        </tr>
+        {%endfor%}
+       
+        <!-- Add more rows for additional students -->
+    </tbody>
+</table>
+
+</body>
+</html>
