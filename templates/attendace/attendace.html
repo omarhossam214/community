@@ -1,8 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/base_site.html" %}
+
+
+{% block sidebar %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Add this to the head of your HTML document -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
     <style>
         table {
             border-collapse: collapse;
@@ -23,6 +32,74 @@
         tr:hover {
             background-color: #f5f5f5;
         }
+
+
+        /* Add this to your CSS file or style section in your HTML */
+
+        .attendance-cell {
+            padding: 5px; /* Adjust the padding as needed */
+        }
+
+        .attendance-dropdown {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #fff;
+            color: #333;
+        }
+
+    /* Add more styles as needed */
+
+
+    /* Add this to your CSS file or style section in your HTML */
+
+    .attendance-cell {
+        padding: 10px; /* Adjust the padding as needed */
+    }
+
+    .attendance-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .attendance-dropdown {
+        width: 100px; /* Adjust the width as needed */
+        margin-right: 10px; /* Adjust the margin as needed */
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        cursor: pointer;
+        background-color: #fff;
+        color: #333;
+    }
+
+    .note-link {
+        color: #186bc3;
+        text-decoration: none;
+        margin-left: 10px; /* Adjust the margin as needed */
+    }
+
+    .note-link:hover {
+        text-decoration: underline;
+    }
+
+    .datepicker {
+        padding-left: 25px; /* Adjust the padding as needed */
+        background-image: url('path/to/calendar-icon.png'); /* Replace with the path to your calendar icon image */
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: 20px 20px; /* Adjust the size of the icon */
+        cursor: pointer;
+    }
+    
+
+
     </style>
     <title>Attendance Table</title>
 </head>
@@ -34,27 +111,54 @@
     <thead>
         <tr>
             <th>Student Name</th>
-            {% for class_num in classes %}
-                <th> {{ classes }}</th>
-            {% endfor %}
-
+            {%for class in classes%}
+            <th>{{class}}</th>
+            {%endfor%}
             <!-- Add more columns for additional classes -->
         </tr>
     </thead>
     <tbody>
-        {%for i in attendance_records%}
+        {% for record in attendance_records %}
         <tr>
-            <td>{{i.student.name}}</td>
-            <td>Present</td>
-            <td>Absent</td>
-            <td>Present</td>
+            <td>{{ record.student_name }}</td>
+    
+            {% for class_info in record.class %}
+            <td id="{{ class_info.class_id }}">
+                <select class="attendance-dropdown" name="attendance_status" id="attendance_status" onchange="updateAttendance(this)">
+                    <option value="attended" {% if class_info.class_status == 'Not chosen' %} selected {% endif %}>Not chosen</option>
+                    <option value="attended" {% if class_info.class_status == 'attended' %} selected {% endif %}>Attended</option>
+                    <option value="cancelled_teacher" {% if class_info.class_status == 'cancelled_teacher' %} selected {% endif %}>Cancelled by Teacher</option>
+                    <option value="cancelled_student" {% if class_info.class_status == 'cancelled_student' %} selected {% endif %}>Cancelled by Student</option>
+                </select>
+                <a href="http://127.0.0.1:8000/admin/active/attendancerecord/{{ class_info.class_id }}"  class="note-link"> Take Note </a>
+                <input type="text" class="datepicker" placeholder="Select date" readonly="readonly">
+            </td>
+            {% endfor %}
             <!-- Add more columns for additional classes -->
         </tr>
-        {%endfor%}
-       
+        {% endfor %}
         <!-- Add more rows for additional students -->
     </tbody>
+    
 </table>
+
+
+
+
+
+
+
+
+<script>
+    flatpickr('.datepicker', {
+        dateFormat: 'Y-m-d',
+        enableTime: false,
+        time_24hr: true,
+    });
+</script>
+
+
+{% endblock %}
 
 </body>
 </html>

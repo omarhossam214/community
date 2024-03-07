@@ -421,10 +421,42 @@ class Attendance(models.Model):
 
         super().save(*args, **kwargs)
 
- 
 
 
-    
+    #create a method that return AttendanceRecord that related to the same active course @property
+    @property
+    def get_AttendanceRecord(self):
+         
+        attendance_records = AttendanceRecord.objects.filter(attendance=self)
+
+        student_attendance = []
+
+        for record in attendance_records:
+            student_id = record.student.id  # Assuming 'id' is the field for student ID
+
+            # Check if the student is already in the list
+            existing_student = next((student for student in student_attendance if student['student_id'] == student_id), None)
+
+            if existing_student:
+                # Student is already in the list, append class information
+                existing_student['class'].append({
+                    'class_status': record.attended,
+                    'class_id': record.id  # Assuming 'id' is the field for course ID
+                })
+            else:
+                # Student is not in the list, add a new entry
+                student_attendance.append({
+                    'student_name': record.student.name,  # Assuming 'name' is the field for student name
+                    'student_id': student_id,
+                    'class': [{
+                        'class_status': record.attended,
+                        'class_id': record.id  # Assuming 'id' is the field for course ID
+                    }]
+                })
+
+        return student_attendance
+
+        
     
 class AttendanceRecord(models.Model):
 
@@ -433,9 +465,21 @@ class AttendanceRecord(models.Model):
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE,null=True)
     
     ATTENDANCE_CHOICES = [
+        ('not chosen','Not chosen'),
         ('attended', 'Attended'),
         ('cancelled_teacher', 'Cancelled by Teacher'),
         ('cancelled_student', 'Cancelled by Student'),
     ]
 
-    attended = models.CharField(max_length=20, choices=ATTENDANCE_CHOICES, default='attended',null=True)
+    attended = models.CharField(max_length=20, choices=ATTENDANCE_CHOICES, default='not chosen',null=True)
+
+    date = models.DateField(null=True)
+
+
+    content = RichTextField(null=True, blank=True)
+
+
+
+    def __str__(self):
+        return f"attendance of {self.student} - {self.attended} ---  ID : {self.attendance.active_course}"
+ 

@@ -48,32 +48,21 @@ def index(request):
 def attendances(request, pk):
     active = get_object_or_404(ActiveCourse, pk=pk)
     
-    # Check if the ActiveCourse object exists
+    # Check if the ActiveCourse object exists Attendance
     if active:
         # Get the course_classes_count for the ActiveCourse
-        students_classes_count = Attendance.objects.filter(active_course=active).first().get_course_classes_count
+        students_classes_count = Attendance.objects.filter(active_course=active).first()
 
-        # Retrieve all AttendanceRecord instances based on active_course_id
-        attendance_records = AttendanceRecord.objects.filter(attendance__active_course=active)
-
-        # Generate a list of class names
-        classes = [f'Class {i}' for i in range(1, students_classes_count + 1)]
-
-        # Create a dictionary to store organized data
-        student_data = defaultdict(lambda: {'student': None, 'classes': []})
-
-        for record in attendance_records:
-            student_name = record.student.name  # Assuming 'name' is the field for student name
-            attended_status = record.attended
-
-            # Update the dictionary
-            student_data[student_name]['student'] = student_name
-            student_data[student_name]['classes'].append({'attended': attended_status})
-
-        # Convert the dictionary values to a list for rendering
-        organized_data = list(student_data.values())
+        
+        classes_count = students_classes_count.get_course_classes_count
 
 
-        print(student_data)
+        classes = [f'Class {i}' for i in range(1, classes_count + 1)]
 
-        return render(request, 'attendace/attendace.html', {'classes': classes, 'organized_data': organized_data})
+        attendance_records = students_classes_count.get_AttendanceRecord
+
+        print(classes)
+        
+
+
+        return render(request, 'attendace/attendace.html',{'attendance_records':attendance_records,'classes':classes})
