@@ -2,6 +2,38 @@
 
 
 {% block sidebar %}
+
+
+
+
+
+<script type="text/javascript">
+    var user = '{{request.user}}';
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+</script>
+
+
+
+
+
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,19 +69,19 @@
         /* Add this to your CSS file or style section in your HTML */
 
         .attendance-cell {
-            padding: 5px; /* Adjust the padding as needed */
+            padding: 20px; /* Adjust the padding as needed */
         }
 
         .attendance-dropdown {
-            width: 100%;
-            padding: 8px;
+            width: 1500%;
             font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 10px solid #010113;
+            border-radius: 10px;
             box-sizing: border-box;
             cursor: pointer;
             background-color: #fff;
             color: #333;
+            width: auto;
         }
 
     /* Add more styles as needed */
@@ -69,7 +101,6 @@
     .attendance-dropdown {
         width: 100px; /* Adjust the width as needed */
         margin-right: 10px; /* Adjust the margin as needed */
-        padding: 8px;
         font-size: 14px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -108,6 +139,7 @@
 <h2>Attendance Table</h2>
 
 <table>
+
     <thead>
         <tr>
             <th>Student Name</th>
@@ -118,21 +150,23 @@
         </tr>
     </thead>
     <tbody>
-        {% for record in attendance_records %}
+        {% for record in attendance_records %} student_id
         <tr>
-            <td>{{ record.student_name }}</td>
+            <td><a href="http://127.0.0.1:8000/admin/active/pupl/{{ record.student_id}}/change/" style="font-family: 'Bond', Serif; font-size: 15px;">{{ record.student_name }}</a></td>
     
             {% for class_info in record.class %}
+
             <td id="{{ class_info.class_id }}">
-                <select class="attendance-dropdown" name="attendance_status" id="attendance_status" onchange="updateAttendance(this)">
+                <select class="attendance-dropdown" name="attendance_status" id="attendance_status" onchange="updateAttendance(this, '{{ class_info.class_id }}')">
                     <option value="attended" {% if class_info.class_status == 'Not chosen' %} selected {% endif %}>Not chosen</option>
                     <option value="attended" {% if class_info.class_status == 'attended' %} selected {% endif %}>Attended</option>
                     <option value="cancelled_teacher" {% if class_info.class_status == 'cancelled_teacher' %} selected {% endif %}>Cancelled by Teacher</option>
                     <option value="cancelled_student" {% if class_info.class_status == 'cancelled_student' %} selected {% endif %}>Cancelled by Student</option>
                 </select>
                 <a href="http://127.0.0.1:8000/admin/active/attendancerecord/{{ class_info.class_id }}"  class="note-link"> Take Note </a>
-                <input type="text" class="datepicker" placeholder="Select date" readonly="readonly">
+                <input type="text" class="datepicker" placeholder="Select date" readonly="readonly" >
             </td>
+
             {% endfor %}
             <!-- Add more columns for additional classes -->
         </tr>
@@ -143,18 +177,57 @@
 </table>
 
 
+<script>
 
 
+    function updateAttendance(selectElement, classId) {
+
+        var selectedOption = selectElement.value;
+        var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+        var selectedDate = selectElement.parentElement.querySelector('.datepicker').value;
+
+        var formData = {
+            'Class_id': classId,
+            'Selected_attendance': selectedOption,
+            'Selected_date': selectedDate
+        };
+
+        console.log(formData)
+
+        var url = '/timetable/update_attendance'  ;
+
+        console.log(url)
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'form': formData }) // Corrected the variable name
+        })
 
 
+    }
+
+  
+</script>
 
 
 <script>
+
+
     flatpickr('.datepicker', {
         dateFormat: 'Y-m-d',
         enableTime: false,
         time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            var classId = instance.element.closest('td').id;
+            updateAttendance(instance.element.closest('td').querySelector('.attendance-dropdown'), classId);
+        }
     });
+
+
 </script>
 
 

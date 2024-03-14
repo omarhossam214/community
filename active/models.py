@@ -286,6 +286,11 @@ class ActiveCourse(models.Model):
             return 0
         
     
+    def __str__(self):
+        return f"{self.course_class_id} - {self.course}"
+ 
+        
+    
 
 class pupl(models.Model):
 
@@ -424,6 +429,7 @@ class Attendance(models.Model):
 
 
     #create a method that return AttendanceRecord that related to the same active course @property
+        #### to-do update the Date to the Dict data that being send  ##### 
     @property
     def get_AttendanceRecord(self):
          
@@ -441,16 +447,16 @@ class Attendance(models.Model):
                 # Student is already in the list, append class information
                 existing_student['class'].append({
                     'class_status': record.attended,
-                    'class_id': record.id  # Assuming 'id' is the field for course ID
+                    'class_id': record.id  
                 })
             else:
                 # Student is not in the list, add a new entry
                 student_attendance.append({
-                    'student_name': record.student.name,  # Assuming 'name' is the field for student name
+                    'student_name': record.student.name,  
                     'student_id': student_id,
                     'class': [{
                         'class_status': record.attended,
-                        'class_id': record.id  # Assuming 'id' is the field for course ID
+                        'class_id': record.id  
                     }]
                 })
 

@@ -8,6 +8,8 @@ app_name = 'attendances'
 urlpatterns=[
     path('',views.index,name='index'),
     path('/<int:pk>/', views.attendances, name='attendances'),
+    path('/update_attendance',views.update_attendance,name='update_attendance')
+
 ]
 
  
